@@ -1,0 +1,42 @@
+#! /bin/sh
+
+### BEGIN INIT INFO
+# Provides: robotserver
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Should-Start:      $named
+# Default-Start:     2 3 4 5
+# Default-Stop: 
+# Short-Description: start bailey server
+# Description:
+### END INIT INFO
+
+#Activate
+# sudo chmod 0755 /etc/init.d/robotserver
+# sudo update-rc.d robotserver defaults
+
+# Some things that run always
+#su pi -c 'python /home/pi/Documents/Sketches/Selfbalancingrobot/robotserver.py'
+
+# Carry out specific functions when asked to by the system
+case "$1" in
+  start)
+    su pi -c 'sudo node /home/pi/Documents/Sketches/Bailey/server/robotserver.js'
+    echo "Starting Bailey server"
+    # Print the IP address
+    _IP=$(hostname -I) || true
+    if [ "$_IP" ]; then
+      printf "My IP address is %s\n" "$_IP"
+    fi
+    ;;
+  stop)
+    su root -c 'sudo killall node'
+    echo "Bailey server has been stopped (didn't double check though)"
+    ;;
+  *)
+    echo "Usage: /etc/init.d/robotserver {start|stop}"
+    exit 1
+    ;;
+esac
+
+exit 0

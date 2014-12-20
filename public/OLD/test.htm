@@ -1,0 +1,33 @@
+ <!DOCTYPE html>
+<html class="js flexbox flexboxlegacy canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths"
+lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bailey | Welcome</title>
+    <link rel="stylesheet" href="foundation/css/foundation.css">
+    <script src="foundation/js/vendor/modernizr.js"></script>
+    
+  <script src="js/foundation/foundation.js"></script>
+  <script src="js/foundation/foundation.slider.js"></script>
+  <script type="text/javascript" src="/js/socket.io.js"></script>
+  <script src="jQuery/lib/jquery-1.7.1.js"></script>
+  <script src="jQuery/src/rangeinput/rangeinput.js"></script>
+
+<link rel="stylesheet" type="text/css" href="css/RangeInputskin1.css"/>
+</head>
+
+  <input type="text" id="right-label" style="width:150px;" placeholder="SCMD command">&nbsp;<a href="#" onclick="sendCMD()"class="button round tiny">SCMD</a> 
+
+  
+   <script type="text/javascript" src="/js/socket.io.js"></script>
+    <script lang="javascript" type="text/javascript">
+    var socket = io();
+	
+	function sendCMD() {
+     //document.getElementById("CMD").innerHTML = document.getElementById("right-label").value;
+      socket.emit('SCMD', document.getElementById("right-label").value);    
+}
+	
+    </script>

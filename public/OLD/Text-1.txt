@@ -1,0 +1,123 @@
+<div class="row">
+  <div class="medium-2 columns">
+	<span class="labelSwitch" >Motors</span>
+	<div class="switch round medium">
+	    <input  id="Motors" type="checkbox" onchange="MotorF(this)">
+	    <label for="Motors">Motors</label>
+	      
+	</div>
+	 <span class="labelSwitch" >Auto mode</span>
+	 <div class="switch round medium">
+	  <input id="Auto" type="checkbox">
+	 <label for="Auto"></label>
+	</div> 
+	  <span class="labelSwitch" >Log</span>
+	 <div class="switch round medium">
+	  <input id="Log" type="checkbox" onchange="LogF(this)">
+	  <label for="Log"></label>
+	</div> 
+	  <span class="labelSwitch" >Auto-tune</span>
+	 <div class="switch round medium">
+	  <input id="Autotune" type="checkbox">
+	  <label for="Autotune"></label>
+	</div> 
+	<span class="labelSwitch">Video</span>
+	 <div class="switch round medium">
+	 <input id="Video" type="checkbox" onclick="VideoF(this)">
+	 <label for="Video"></label>
+	</div> 
+  </div>
+  <div class="medium-6 columns">
+
+	<ul class="small-block-grid-9">
+	    <li>
+	    <span id="APIDConKpVal" ></span>&nbsp;
+	    <div id="APIDConKp" class="range-slider vertical-range" data-slider data-options="vertical: true; display_selector: #SL; start: 0; end: 1500;">
+	    <span class="range-slider-handle" role="slider" tabindex="0"></span>
+	    <span class="range-slider-active-segment"></span>
+	    <input type="hidden">
+	</div>	
+<!-- Your content goes here --></li>
+	    <li>
+	    <span id="APIDConKiVal" ></span>&nbsp;
+	    <div id="APIDConKi" class="range-slider vertical-range" data-slider data-options="vertical: true;  display_selector: #SL2; start: 0; end: 2000;">
+	    <span class="range-slider-handle" role="slider" tabindex="0"></span>
+	    <span class="range-slider-active-segment"></span>
+	    
+	    <input type="hidden">
+	</div>
+<!-- Your content goes here --></li>
+	    <li>
+	    <span id="APIDConKdVal" ></span>&nbsp;
+	    <div id="APIDConKd" class="range-slider vertical-range" data-slider data-options="vertical: true; start: 0; end: 200;">
+	    <span class="range-slider-handle" role="slider" tabindex="0"></span>
+	    <span class="range-slider-active-segment"></span>
+	    <input type="hidden">
+	</div> 
+<!-- Your content goes here --></li>
+	    <li>
+	    <span id="APIDAggKpVal" ></span>&nbsp;
+	    <div id="APIDAggKp" class="range-slider vertical-range" data-slider data-options="vertical: true; display_selector: #SL; start: 0; end: 5000;">
+	    <span class="range-slider-handle" role="slider" tabindex="0"></span>
+	    <span class="range-slider-active-segment"></span>
+	    <input type="hidden">
+	</div>
+<!-- Your content goes here --></li>
+	    <li>
+	    <span id="APIDAggKiVal" ></span>&nbsp;
+	    <div id="APIDAggKi" class="range-slider vertical-range" data-slider data-options="vertical: true; start: 0; end: 5000;">
+	    <span class="range-slider-handle" role="slider" tabindex="0"></span>
+	    <span class="range-slider-active-segment"></span>
+	    <input type="hidden">
+	</div> 
+<!-- Your content goes here --></li>
+	    <li>
+	    <span id="APIDAggKdVal" ></span>&nbsp;
+	    <div id="APIDAggKd" class="range-slider vertical-range" data-slider data-options="vertical: true; start: 0; end: 1500;">
+	    <span class="range-slider-handle" role="slider" tabindex="0"></span>
+	    <span class="range-slider-active-segment"></span>
+	    <input type="hidden">
+	</div> 
+<!-- Your content goes here --></li>
+	    <li>
+	    <span id="SPIDKpVal" ></span>&nbsp;
+	    <div id="SPIDKp" class="range-slider vertical-range" data-slider data-options="vertical: true; display_selector: #SL; start: 3000; end: 7000;">
+	    <span class="range-slider-handle" role="slider" tabindex="0"></span>
+	    <span class="range-slider-active-segment"></span>
+	    <input type="hidden">
+	</div>
+<!-- Your content goes here --></li>
+	    <li>
+   	    <span id="SPIDKiVal" ></span>&nbsp;
+	    <div id="SPIDKi" class="range-slider vertical-range" data-slider data-options="vertical: true; start: 0; end: 300;">
+	    <span class="range-slider-handle" role="slider" tabindex="0"></span>
+	    <span class="range-slider-active-segment"></span>
+	    <input type="hidden">
+	</div> 
+<!-- Your content goes here --></li>
+	    <li>
+    	    <span id="SPIDKdVal" ></span>&nbsp;
+	    <div id="SPIDKd" class="range-slider vertical-range" data-slider data-options="vertical: true; start: 0; end: 150;">
+	    <span class="range-slider-handle" role="slider" tabindex="0"></span>
+	    <span class="range-slider-active-segment"></span>
+	    <input type="hidden">
+	</div> 
+<!-- Your content goes here --></li></ul>
+
+            <span id="calibratedZeroAngleVal" ></span>&nbsp;
+	    <div id="calibratedZeroAngle" class="range-slider" data-slider data-options="vertical: false; display_selector: #SL; start: -400; end: 400;">
+	    <span class="range-slider-handle" role="slider" tabindex="0"></span>
+	    <span class="range-slider-active-segment"></span>
+	    <input type="hidden">
+            </div>
+            
+  </div>
+  
+  <div class="medium-4 columns">
+      <!--<iframe src="http://192.168.1.145:54321/vj" width="280" height="280" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>  -->
+ 
+  </div>
+
+
+<!--Closes the row-->
+</div>

@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<meta charset="utf-8">
+<style>
+ 
+svg {
+  font: 10px sans-serif;
+}
+ 
+.line {
+  fill: none;
+  stroke: #000;
+  stroke-width: 1.5px;
+}
+ 
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+ 
+</style>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title>Bailey | Welcome</title>
+    <script src="/js/d3.js"></script>
+    
+    <script src="/js/socket.io.js"></script>
+</head>
+
+<script>
+ var socket = io();
+ var started = 0;
+ var dataBal = [];
+ var dataPitch = [];
+ 
+    socket.on('connected', function(V, ArduRead){
+        document.getElementById("Info").innerHTML = "Connected";
+    });
+  
+    socket.on('disconnect', function(V, ArduRead){
+        document.getElementById("Info").innerHTML = "disconnected";
+    });
+    
+    socket.on('status', function (y, p, r, b) {
+        document.getElementById("BAL").innerHTML = b;
+        document.getElementById("Pitch").innerHTML = p;
+ 
+    });
+    
+ 
+</script>
+ 
+<body>
+ <!-- Info --> 
+<div class="row">
+  <div class="medium-4 columns">
+    <span class="labelSwitch" >Command: </span>    
+    <span class="labelSwitch" id="CMD">last command</span>
+  </div>
+  <div class="medium-4 columns">
+    <span class="labelSwitch" >B: </span>    
+    <span class="labelSwitch" id="BAL">Balance Index</span>
+  </div>
+  <div class="medium-4 columns">
+    <span class="labelSwitch" >P: </span>    
+    <span class="labelSwitch" id="Pitch">Info</span>
+  </div>
+ <div class="medium-4 columns">
+    <span class="labelSwitch" >Info: </span>    
+    <span class="labelSwitch" id="Info">Info</span>
+  </div>
+</div>
+
+<iframe src="http://192.168.1.145:54321/lv2" width=100% height="500" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+
+
+</body>
+</html>

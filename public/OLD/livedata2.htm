@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<script src="/js/socket.io.js"></script>
+
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<style>
+
+svg {
+  font: 10px sans-serif;
+}
+
+.line {
+  fill: none;
+  stroke: #000;
+  stroke-width: 1.5px;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+</style>
+<body>
+<script>
+var socket = io();
+var valueP = 0;
+var valueB = 0;
+
+   
+var n = 50,
+    random = d3.random.normal(0, .2),
+    data = d3.range(n).map(random);
+    random = d3.random.normal(-2, .2),
+    
+    data2= d3.range(n).map(random);
+    
+var margin = {top: 20, right: 20, bottom: 20, left: 40},
+    width = 800 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+
+var x = d3.scale.linear()
+    .domain([0, n - 1])
+    .range([0, width]);
+
+var y = d3.scale.linear()
+    .domain([-10, 10])
+    .range([height, 0]);
+
+var y1 = d3.scale.linear()
+    .domain([-5, 5])
+    .range([height, 0]);
+    
+var yAxisRight = d3.svg.axis().scale(y1)
+    .orient("right").ticks(5);
+ 
+var BalY = d3.svg.area()
+    .x(function(d, i) { return x(i); })
+    .y(function(d, i) { return y(d); })
+    .y0(height);
+    
+var line = d3.svg.line()
+    .x(function(d, i) { return x(i); })
+    .y(function(d, i) { return y(d); });
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+svg.append("defs").append("clipPath")
+    .attr("id", "clip")
+    .append("rect")
+    .attr("width", width)
+    .attr("height", height);
+
+svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + y(0) + ")")
+    .call(d3.svg.axis().scale(x).orient("bottom"));
+
+svg.append("g")
+    .attr("class", "y axis")
+    .call(d3.svg.axis().scale(y).orient("left"));
+
+svg.append("g")				
+  .attr("class", "y axis")	
+  .attr("transform", "translate(" + width + " ,0)")	
+  .style("fill", "red")		
+  .call(yAxisRight);
+
+var path = svg.append("g")
+    .attr("clip-path", "url(#clip)")
+    .append("path")
+    .datum(data)
+    .attr("class", "line")
+    .style("stroke", "steelblue")
+    .attr("d", line);
+
+var path2 = svg.append("g")
+    .attr("clip-path", "url(#clip)")
+    .append("path")
+    .datum(data2)
+    .attr("class", "line")
+    .style("stroke", "red")
+    .attr("d", line);
+
+
+    
+    socket.on('status', function (y, p, r, b) {
+	    //document.getElementById("minp").innerHTML = p;
+            valueP=p;
+	    valueB=b;
+	    
+	      
+  });
+    
+tick();
+
+
+function tick() {
+
+  // push a new data point onto the back
+  data.push(valueP);
+   // pop the old data point off the front
+  data.shift();
+  // push a new data point onto the back
+  data2.push(valueB);
+   // pop the old data point off the front
+  data2.shift();
+  // redraw the line, and slide it to the left
+  path2
+      .attr("d", line)
+      .attr("transform", null)
+      .transition()
+      .duration(200)
+      .ease("linear")
+      .attr("transform", "translate(" + x(-1) + ",0)")
+      .each("end", tick);
+ 
+  // redraw the line, and slide it to the left
+  path
+      .attr("d", line)
+      .attr("transform", null)
+      .transition()
+      .duration(200)
+      .ease("linear")
+      .attr("transform", "translate(" + x(-1) + ",0)")
+      .each("end", tick);
+   
+   
+   
+ 
+  //data[0].exit;
+  
+  //y = d3.scale.linear().domain(d3.extent(data)).range([height, 0]);
+  svg.select(".y.axis")
+    .call(d3.svg.axis()
+    .scale(y)
+    .orient("left"));
+
+    
+  svg.select("x axis")
+    .attr("transform", "translate(0," + y(0) + ")")
+    .call(d3.svg.axis().scale(x).orient("bottom"));
+  
+  //document.getElementById("d").innerHTML = d3.values(data);
+  //document.getElementById("maxp").innerHTML = d3.extent(data);
+ 
+
+}
+
+</script>
+
+<!--<div id="d">sds</div><div id="maxp">sds</div><div id="minp">sds</div>-->

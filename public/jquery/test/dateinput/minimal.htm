@@ -1,0 +1,15 @@
+<script src="../../lib/jquery-1.7.1.js"></script>
+<script src="../../src/dateinput/dateinput.js"></script>
+
+<link rel="stylesheet" type="text/css" href="skin1.css"/>
+
+<!-- HTML5 date input -->
+<input type="date" name="mydate" />
+
+<!-- make it happen -->
+<script>
+var api = $(":date").dateinput({ selectors: true, yearRange: [-10, 10] }).data("dateinput");
+
+api.setValue('2012-10-10');
+</script>
+

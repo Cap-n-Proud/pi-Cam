@@ -1,0 +1,32 @@
+<title>3Dtut - 1</title>
+<script type="text/javascript" src="http://mbostock.github.com/d3/d3.js?2.4.5">   </script>
+
+
+
+<STYLE type="text/css">
+.chart div {
+   font: 10px sans-serif;
+   background-color: steelblue;
+   text-align: right;
+   padding: 3px;
+   margin: 1px;
+   color: white;
+ }
+ </STYLE>
+</head>
+<body>
+</body>
+</html><script type="text/javascript">
+var data = [4, 8, 15, 16, 23, 42];  
+
+//container for the bar chart
+var chart = d3.select("body").append("div")
+.attr("class", "chart");
+
+//adding div elements to the bar chart
+ chart.selectAll("div")
+     .data(data)
+     .enter().append("div")
+     .style("width", function(d) { return d * 10 + "px"; })
+     .text(function(d) { return d; });
+</script>

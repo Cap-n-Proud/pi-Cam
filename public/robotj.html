@@ -1,0 +1,88 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport">
+		   <script type="text/javascript" src="/js/socket.io.js"></script>
+		   <script type="text/javascript" src="/js/virtualjoystick.js"></script>
+  
+		<style>
+		body {
+			overflow	: hidden;
+			padding		: 0;
+			margin		: 0;
+			background-color: #BBB;
+		}
+		#info {
+			position	: absolute;
+			top		: 0px;
+			width		: 100%;
+			padding		: 5px;
+			text-align	: center;
+		}
+		#info a {
+			color		: #66F;
+			text-decoration	: none;
+		}
+		#info a:hover {
+			text-decoration	: underline;
+		}
+		#container {
+			width		: 250px;
+			height		: 250px;
+			overflow	: hidden;
+			padding		: 5px;
+			margin		: 5px;
+			border-width: 2px;
+			border-style: dashed; 
+			-webkit-user-select	: none;
+			-moz-user-select	: none;
+		}
+		</style>
+	</head>
+	<body>
+		<div id="container" onmouseup="mouseUp()" onmousedown="mouseDown()"></div>
+		<div id="info">
+			
+			<span id="result"></span>
+		</div> 
+
+		<script>
+			var prevX, prevY;
+				var joystick	= new VirtualJoystick({
+				container	: document.getElementById('container'),
+				mouseSupport	: true,
+			});
+			var socket = io();
+			console.log("touchscreen is", VirtualJoystick.touchScreenAvailable() ? "available" : "not available");
+	
+			
+			
+			
+			setInterval(function(){
+				if (joystick.deltaX() !=0 || joystick.deltaY() !=0){
+					socket.emit('move', 100 * joystick.deltaX()/250, - 100 * joystick.deltaY()/250);				
+				}
+				var outputEl	= document.getElementById('result');
+				outputEl.innerHTML	= '<b>Result:</b> '
+					+ ' dx:'+ 100 * joystick.deltaX()/250
+					+ ' dy:'+  100* joystick.deltaY()/250
+					+ (joystick.right()	? ' right'	: '')
+					+ (joystick.up()	? ' up'		: '')
+					+ (joystick.left()	? ' left'	: '')
+					+ (joystick.down()	? ' down' 	: '')	
+			}, 1/30 * 1000);
+			
+	
+			function mouseDown() {
+				document.getElementById("container").style.color = "red";
+				
+			}
+		
+			function mouseUp() {
+			    document.getElementById("container").style.color = "black";
+			    socket.emit('move', 0, 0);			
+			}
+		
+		</script>
+	</body>
+</html>

@@ -1,0 +1,17 @@
+jqGauges for jQuery Plugin
+
+===========================
+Installlation
+===========================
+
+http://www.jqchart.com/docs/jquery/#!/guide/JQRadialGaugeGettingStarted
+http://www.jqchart.com/docs/jquery/#!/guide/JQLinearGaugeGettingStarted
+http://www.jqchart.com/docs/jquery/#!/guide/JQBulletGraphGettingStarted
+http://www.jqchart.com/docs/jquery/#!/guide/JQSegmentedDisplayGettingStarted
+
+==
+
+If you have any questions, just mail them to support@jqchart.com
+
+Regards,
+Dragan Matek /jqChart Inc/

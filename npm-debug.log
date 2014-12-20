@@ -1,0 +1,138 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/local/bin/node',
+1 verbose cli   '/usr/local/bin/npm',
+1 verbose cli   'install',
+1 verbose cli   '-g',
+1 verbose cli   'pi-blaster.js' ]
+2 info using npm@1.4.28
+3 info using node@v0.10.33
+4 verbose cache add [ 'pi-blaster.js', null ]
+5 verbose cache add name=undefined spec="pi-blaster.js" args=["pi-blaster.js",null]
+6 verbose parsed url { protocol: null,
+6 verbose parsed url   slashes: null,
+6 verbose parsed url   auth: null,
+6 verbose parsed url   host: null,
+6 verbose parsed url   port: null,
+6 verbose parsed url   hostname: null,
+6 verbose parsed url   hash: null,
+6 verbose parsed url   search: null,
+6 verbose parsed url   query: null,
+6 verbose parsed url   pathname: 'pi-blaster.js',
+6 verbose parsed url   path: 'pi-blaster.js',
+6 verbose parsed url   href: 'pi-blaster.js' }
+7 silly lockFile 09b1d999-pi-blaster-js pi-blaster.js
+8 verbose lock pi-blaster.js /home/pi/.npm/09b1d999-pi-blaster-js.lock
+9 silly lockFile 09b1d999-pi-blaster-js pi-blaster.js
+10 silly lockFile 09b1d999-pi-blaster-js pi-blaster.js
+11 verbose addNamed [ 'pi-blaster.js', '' ]
+12 verbose addNamed [ null, '*' ]
+13 silly lockFile 3a8d1e17-pi-blaster-js pi-blaster.js@
+14 verbose lock pi-blaster.js@ /home/pi/.npm/3a8d1e17-pi-blaster-js.lock
+15 silly addNameRange { name: 'pi-blaster.js', range: '*', hasData: false }
+16 verbose request where is /pi-blaster.js
+17 verbose request registry https://registry.npmjs.org/
+18 verbose request id e64c0da836e6ae59
+19 verbose url raw /pi-blaster.js
+20 verbose url resolving [ 'https://registry.npmjs.org/', './pi-blaster.js' ]
+21 verbose url resolved https://registry.npmjs.org/pi-blaster.js
+22 verbose request where is https://registry.npmjs.org/pi-blaster.js
+23 info trying registry request attempt 1 at 10:10:16
+24 http GET https://registry.npmjs.org/pi-blaster.js
+25 http 200 https://registry.npmjs.org/pi-blaster.js
+26 silly registry.get cb [ 200,
+26 silly registry.get   { date: 'Sat, 13 Dec 2014 10:10:18 GMT',
+26 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+26 silly registry.get     etag: '"EBQ84EI0EIBVVYXWSXOMZMVAU"',
+26 silly registry.get     'content-type': 'application/json',
+26 silly registry.get     'cache-control': 'max-age=60',
+26 silly registry.get     'content-length': '4441',
+26 silly registry.get     'accept-ranges': 'bytes',
+26 silly registry.get     via: '1.1 varnish',
+26 silly registry.get     age: '0',
+26 silly registry.get     'x-served-by': 'cache-ams4132-AMS',
+26 silly registry.get     'x-cache': 'MISS',
+26 silly registry.get     'x-cache-hits': '0',
+26 silly registry.get     'x-timer': 'S1418465417.617358,VS0,VE385',
+26 silly registry.get     vary: 'Accept',
+26 silly registry.get     'keep-alive': 'timeout=10, max=50',
+26 silly registry.get     connection: 'Keep-Alive' } ]
+27 silly addNameRange number 2 { name: 'pi-blaster.js', range: '*', hasData: true }
+28 silly addNameRange versions [ 'pi-blaster.js', [ '0.0.1', '0.0.2' ] ]
+29 verbose addNamed [ 'pi-blaster.js', '0.0.2' ]
+30 verbose addNamed [ '0.0.2', '0.0.2' ]
+31 silly lockFile 54737bfc-pi-blaster-js-0-0-2 pi-blaster.js@0.0.2
+32 verbose lock pi-blaster.js@0.0.2 /home/pi/.npm/54737bfc-pi-blaster-js-0-0-2.lock
+33 silly lockFile c76dc5d9-aster-js-pi-blaster-js-0-0-2-tgz https://registry.npmjs.org/pi-blaster.js/-/pi-blaster.js-0.0.2.tgz
+34 verbose lock https://registry.npmjs.org/pi-blaster.js/-/pi-blaster.js-0.0.2.tgz /home/pi/.npm/c76dc5d9-aster-js-pi-blaster-js-0-0-2-tgz.lock
+35 verbose addRemoteTarball [ 'https://registry.npmjs.org/pi-blaster.js/-/pi-blaster.js-0.0.2.tgz',
+35 verbose addRemoteTarball   '3999d220da2777df5386b32b6d59b4f5df12a574' ]
+36 info retry fetch attempt 1 at 10:10:18
+37 verbose fetch to= /tmp/npm-2376-XzPLVe0w/registry.npmjs.org/pi-blaster.js/-/pi-blaster.js-0.0.2.tgz
+38 http GET https://registry.npmjs.org/pi-blaster.js/-/pi-blaster.js-0.0.2.tgz
+39 http 200 https://registry.npmjs.org/pi-blaster.js/-/pi-blaster.js-0.0.2.tgz
+40 silly lockFile c76dc5d9-aster-js-pi-blaster-js-0-0-2-tgz https://registry.npmjs.org/pi-blaster.js/-/pi-blaster.js-0.0.2.tgz
+41 silly lockFile c76dc5d9-aster-js-pi-blaster-js-0-0-2-tgz https://registry.npmjs.org/pi-blaster.js/-/pi-blaster.js-0.0.2.tgz
+42 silly lockFile 54737bfc-pi-blaster-js-0-0-2 pi-blaster.js@0.0.2
+43 silly lockFile 54737bfc-pi-blaster-js-0-0-2 pi-blaster.js@0.0.2
+44 silly lockFile 3a8d1e17-pi-blaster-js pi-blaster.js@
+45 silly lockFile 3a8d1e17-pi-blaster-js pi-blaster.js@
+46 silly resolved [ { author: { name: 'Thomas Sarlandie', email: 'thomas@sarlandie.net' },
+46 silly resolved     name: 'pi-blaster.js',
+46 silly resolved     description: 'A node.js library for the pi-blaster daemon - Allows PWM control of the raspberry Pi pins',
+46 silly resolved     version: '0.0.2',
+46 silly resolved     main: 'pi-blaster.js',
+46 silly resolved     repository: { type: 'git', url: 'git@github.com:sarfata/pi-blaster.js.git' },
+46 silly resolved     homepage: 'https://github.com/sarfata/pi-blaster.js',
+46 silly resolved     bugs: { url: 'https://github.com/sarfata/pi-blaster.js/issues' },
+46 silly resolved     tags: [ 'raspberry', 'pi', 'pwm' ],
+46 silly resolved     readme: 'pi-blaster.js\n=============\n\nNodeJS library for the [pi-blaster daemon][pi-blaster].\n\n## Installation\n    \nMake sure you have `node` and `npm` installed on your Raspberry Pi.\n\nInstall the pi-blaster daemon ([instructions][pi-blaster]).\n\nFinally install `pi-blaster.js`:\n\n    npm install pi-blaster.js\n    \n## Usage\n\n    var piblaster = require(\'pi-blaster.js\');\n    \n    piblaster\n    \n## License\n\nCopyright 2013 - Thomas Sarlandie. Published under the MIT open source license (see full license in LICENSE.txt file).\n\n[pi-blaster]: https://github.com/sarfata/pi-blaster',
+46 silly resolved     readmeFilename: 'README.md',
+46 silly resolved     _id: 'pi-blaster.js@0.0.2',
+46 silly resolved     dist:
+46 silly resolved      { shasum: '3999d220da2777df5386b32b6d59b4f5df12a574',
+46 silly resolved        tarball: 'http://registry.npmjs.org/pi-blaster.js/-/pi-blaster.js-0.0.2.tgz' },
+46 silly resolved     _from: 'pi-blaster.js@',
+46 silly resolved     _npmVersion: '1.2.2',
+46 silly resolved     _npmUser: { name: 'sarfata', email: 'thomas@sarlandie.net' },
+46 silly resolved     maintainers: [ [Object] ],
+46 silly resolved     directories: {},
+46 silly resolved     _shasum: '3999d220da2777df5386b32b6d59b4f5df12a574',
+46 silly resolved     _resolved: 'https://registry.npmjs.org/pi-blaster.js/-/pi-blaster.js-0.0.2.tgz' } ]
+47 info install pi-blaster.js@0.0.2 into /usr/local/lib
+48 info installOne pi-blaster.js@0.0.2
+49 verbose lib/node_modules/pi-blaster.js unbuild
+50 verbose tar unpack /home/pi/.npm/pi-blaster.js/0.0.2/package.tgz
+51 silly lockFile a9d5cdf8-l-lib-node-modules-pi-blaster-js tar:///usr/local/lib/node_modules/pi-blaster.js
+52 verbose lock tar:///usr/local/lib/node_modules/pi-blaster.js /home/pi/.npm/a9d5cdf8-l-lib-node-modules-pi-blaster-js.lock
+53 silly lockFile 15040013--pi-blaster-js-0-0-2-package-tgz tar:///home/pi/.npm/pi-blaster.js/0.0.2/package.tgz
+54 verbose lock tar:///home/pi/.npm/pi-blaster.js/0.0.2/package.tgz /home/pi/.npm/15040013--pi-blaster-js-0-0-2-package-tgz.lock
+55 silly gunzTarPerm modes [ '755', '644' ]
+56 error Error: EACCES, mkdir '/usr/local/lib/node_modules/pi-blaster.js'
+56 error  { [Error: EACCES, mkdir '/usr/local/lib/node_modules/pi-blaster.js']
+56 error   errno: 3,
+56 error   code: 'EACCES',
+56 error   path: '/usr/local/lib/node_modules/pi-blaster.js',
+56 error   fstream_type: 'Directory',
+56 error   fstream_path: '/usr/local/lib/node_modules/pi-blaster.js',
+56 error   fstream_class: 'DirWriter',
+56 error   fstream_stack:
+56 error    [ '/usr/local/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:36:23',
+56 error      '/usr/local/lib/node_modules/npm/node_modules/mkdirp/index.js:46:53',
+56 error      'Object.oncomplete (fs.js:107:15)' ] }
+57 error Please try running this command again as root/Administrator.
+58 error System Linux 3.12.34+
+59 error command "/usr/local/bin/node" "/usr/local/bin/npm" "install" "-g" "pi-blaster.js"
+60 error cwd /home/pi/TLServer
+61 error node -v v0.10.33
+62 error npm -v 1.4.28
+63 error path /usr/local/lib/node_modules/pi-blaster.js
+64 error fstream_path /usr/local/lib/node_modules/pi-blaster.js
+65 error fstream_type Directory
+66 error fstream_class DirWriter
+67 error code EACCES
+68 error errno 3
+69 error stack Error: EACCES, mkdir '/usr/local/lib/node_modules/pi-blaster.js'
+70 error fstream_stack /usr/local/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:36:23
+70 error fstream_stack /usr/local/lib/node_modules/npm/node_modules/mkdirp/index.js:46:53
+70 error fstream_stack Object.oncomplete (fs.js:107:15)
+71 verbose exit [ 3, true ]
