@@ -109,11 +109,14 @@ io.on('connection', function(socket){
   });
 
   function TLF() {
-     var myDate = new Date();
+     var MyDate = new Date();
+     var MyTimeStamp;
+    MyTimeStamp = ('0' + MyDate.getHours()).slice(-2) + '-' + ('0' + (MyDate.getMinutes())).slice(-2) + '-' + ('0' + (MyDate.getSeconds())).slice(-2) ;
+
 	 function puts(error, stdout, stderr) { sys.puts(stdout) }
-	  exec('sudo raspistill -w -vf ' + imgWidth + ' -h ' + imgHeight + ' -o '  + TLfolderName+ '/' + TLfileName + '_' + myDate.getHours() + myDate.getMinutes() + myDate.getSeconds() +  '.jpg  -sh 40 -awb auto -mm average -v');
-       // console.log('sudo raspistill -w ' + imgWidth + ' -h ' + imgHeight + ' -o ' + TLfolderName + '/' + TLfileName + '_' + myDate.getHours() + myDate.getMinutes() + myDate.getSeconds() +  '.jpg  -sh 40 -awb auto -mm average -v');
-	socket.emit('Info', TLfileName + '_' + myDate.getHours() + '-' +  myDate.getMinutes() + '-' +  myDate.getSeconds() +  '.jpg');
+	  exec('sudo raspistill -w ' + imgWidth + ' -h ' + imgHeight + ' -o ' + TLfolderName + '/' + TLfileName + '_' + MyTimeStamp +  '.jpg  -sh 40 -awb auto -mm average -v');
+        console.log('sudo raspistill -w ' + imgWidth + ' -h ' + imgHeight + ' -o ' + TLfolderName + '/' + TLfileName + '_' + MyTimeStamp +  '.jpg  -sh 40 -awb auto -mm average -v');
+	socket.emit('Info', TLfileName + '_' + MyTimeStamp +  '.jpg');
 
     }
 
@@ -136,9 +139,14 @@ io.on('connection', function(socket){
   var myVar = "";
   socket.on('TLStart', function(){
    // function puts(error, stdout, stderr) { sys.puts(stdout) }
-    var myDate = new Date();
-    TLfolderName = TLFolder + 'TL_' + myDate.getFullYear() + myDate.getMonth() + myDate.getDate() + '-' +  myDate.getHours() + '-' +  myDate.getMinutes() + '-' +  myDate.getSeconds();
-    TLfileName = 'TL_' + myDate.getFullYear() + myDate.getMonth() + myDate.getDate();
+    var MyDate = new Date();
+    var MyDateString;
+    var MyTimeStamp;
+    MyDateString = ('0' + MyDate.getFullYear()).slice(-2) + '-' + ('0' + (MyDate.getMonth()+1)).slice(-2) + '-' + ('0' + (MyDate.getUTCDate())).slice(-2) ;
+    MyTimeStamp = ('0' + MyDate.getHours()).slice(-2) + '-' + ('0' + (MyDate.getMinutes())).slice(-2) + '-' + ('0' + (MyDate.getSeconds())).slice(-2) ;
+
+    TLfolderName = TLFolder + 'TL_' + MyDateString + '_' + MyTimeStamp;
+    TLfileName = 'TL_' + MyDateString;
     fs.mkdir(TLfolderName);
     socket.emit('Folder', TLfolderName);
     //console.log(TLfolderName);
