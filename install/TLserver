@@ -21,7 +21,7 @@
 # Carry out specific functions when asked to by the system
 case "$1" in
   start)
-    su pi -c 'sudo node /home/pi/Documents/Sketches/Bailey/server/TLserver.js'
+    su pi -c 'sudo node /home/pi/time-lapse-server/TLserver.js'
     echo "Starting TL server"
     # Print the IP address
     _IP=$(hostname -I) || true
