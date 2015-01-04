@@ -1,338 +1,174 @@
-<!DOCTYPE html>
-<html class="js flexbox flexboxlegacy canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths"
-lang="en">
+// sudo udevadm control --reload-rules
+// to refresh the port allocation
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bailey | Welcome</title>
-    <link rel="stylesheet" href="foundation/css/foundation.css">
-    <script src="foundation/js/vendor/modernizr.js"></script>
-    
-  <script src="foundation/js/foundation.min.js"></script>
-  <script src="foundation/js/foundation.slider.js"></script>
-  <script type="text/javascript" src="/js/socket.io.js"></script>
-  <script src="jquery/lib/jquery-1.7.1.js"></script>
-  <script src="jquery/src/rangeinput/rangeinput.js"></script>
+var events = require('events');
+var eventEmitter = new events.EventEmitter();
+var TLFolder="/home/pi/Documents/TL/"
 
-</head>
 
-<style>
+var serPort = "/dev/ttyACM0";
+var serBaud = 38400;
+var serverPort = 999;
 
-body {
-    
-    background: #282828; !important;
-     
-}
-.labelSwitch {
-    color: white;
-}
+var LogR = 0;
+var TelemetryFN = "";
+var prevTel="";
+var prevPitch="";
 
-span,
-output
+var SEPARATOR = ","
+var version = "0.2";
+
+var ArduHeader;
+var ArduRead = {};
+
+//--------------------------------------
+
+var express = require('/usr/local/lib/node_modules/express');
+var app = express();
+var http = require('http').Server(app);
+var io = require('/usr/local/lib/node_modules/socket.io')(http);
+var fs = require('/usr/local/lib/node_modules/safefs');
+var piblaster = require('/usr/local/lib/node_modules/pi-blaster.js');
+
+var sys = require('sys');
+var exec = require('child_process').exec;
+
+var imgWidth = 2592; // Max = 2592
+var imgHeight = 1944; //# Max = 1944
+var TLInterval = 10000;
+
+app.use(express.static(__dirname + '/public'));
+// Routers
 {
-    color: white;
-    text-align: left;
+app.get('/', function(req, res){
+  res.sendFile(__dirname + '/public/index.html');
+  res.end;
+});
+
+app.get('/vj', function(req, res) {
+  res.sendFile(__dirname + '/public/robotj.html');
+  res.end;
+});
+
+app.get('/REBOOT', function(req, res) {
+  var postData = req.url;
+  function puts(error, stdout, stderr) { sys.puts(stdout) }
+  exec('sudo reboot now');
+  sockets.emit('Info', "Rebooting")
+  //console.log(postData);
+  res.end;
+});
+
+
 }
 
+// Logging middleware
 
-
-
-
-div.switch label {
-  display: block;
-  margin-bottom: 1rem;
-  position: relative;
-  color: white;
-  background: #dddddd;
-  text-indent: 100%;
-  width: 4rem;
-  height: 2rem;
-  cursor: pointer;
-  transition: left 0.15s ease-out; }
-div.switch input {
-  display: none; }
-  div.switch input + label {
-    margin-left: 0;
-    margin-right: 0; }
-div.switch label:after {
-  content: "";
-  display: block;
-  background: white;
-  position: absolute;
-  top: .25rem;
-  left: .25rem;
-  width: 1.5rem;
-  height: 1.5rem;
-  -webkit-transition: left 0.15s ease-out;
-  -moz-transition: left 0.15s ease-out;
-  transition: left 0.15s ease-out;
-  -webkit-transform: translate3d(0, 0, 0);
-  -moz-transform: translate3d(0, 0, 0);
-  transform: translate3d(0, 0, 0); }
-div.switch input:checked + label {
-  background: #008cba; }
-div.switch input:checked + label:after {
-  left: 2.25rem; }
-div.switch label {
-  width: 4rem;
-  height: 2rem; }
-div.switch label:after {
-  width: 1.5rem;
-  height: 1.5rem; }
-div.switch input:checked + label:after {
-  left: 2.25rem; }
-div.switch label {
-  color: transparent;
-  background: #dddddd; }
-div.switch label:after {
-  background: white; }
-div.switch input:checked + label {
-  background: #008cba; }
-div.switch.large label {
-  width: 5rem;
-  height: 2.5rem; }
-div.switch.large label:after {
-  width: 2rem;
-  height: 2rem; }
-div.switch.large input:checked + label:after {
-  left: 2.75rem; }
-div.switch.small label {
-  width: 3.5rem;
-  height: 1.75rem; }
-div.switch.small label:after {
-  width: 1.25rem;
-  height: 1.25rem; }
-div.switch.small input:checked + label:after {
-  left: 2rem; }
-div.switch.tiny label {
-  width: 3rem;
-  height: 1.5rem; }
-div.switch.tiny label:after {
-  width: 1rem;
-  height: 1rem; }
-div.switch.tiny input:checked + label:after {
-  left: 1.75rem; }
-div.switch.radius label {
-  border-radius: 4px; }
-div.switch.radius label:after {
-  border-radius: 3px; }
-div.switch.round {
-  border-radius: 1000px; }
-  div.switch.round label {
-    border-radius: 2rem; }
-  div.switch.round label:after {
-    border-radius: 2rem; }
-
-input[class=PIDControlSlider] {
-    -webkit-appearance: slider-vertical;
-    width: 20px;
-    height: 250px;}
-    
-input[class=Throttle] {
-    -webkit-appearance: slider-vertical;
-    width: 20px;
-    height: 250px;}
-
-input[class=PIDControlSlider]::-webkit-slider-runnable-track {
-    width: 20px;
-    height: 250px;
-    background: #ddd;
-    border: none;
-    border-radius: 3px;
+var mkdirSync = function (path) {
+  try {
+    fs.mkdirSync(path);
+  } catch(e) {
+    if ( e.code != 'EEXIST' ) throw e;
+  }
 }
 
-input[class=PIDControlSlider]::-webkit-slider-thumb {
-    -webkit-appearance: slider-vertical;
-    border: none;
-    height: 30px;
-    width: 30px;
-    border-radius: 50%;
-    background: goldenrod;
-    margin-top: -4px;
-}
-
-input[class=PIDControlSlider]:focus {
-    outline: none;
-}
-
-input[class=PIDControlSlider]:focus::-webkit-slider-runnable-track {
-    background: #ccc;
-}
-
-   
-</style>
-
-<body>
+io.on('connection', function(socket){
+  var myDate = new Date();
+  socket.emit('Info', 'Connected ' + myDate.getHours() + ':' +   myDate.getMinutes() + ':' +   myDate.getSeconds());
+  console.log('New socket.io connection - id: %s', socket.id);
+  function puts(error, stdout, stderr) { sys.puts(stdout) }
+  exec('sudo /home/pi/pi-blaster/pi-blaster 4 17');
 
 
-<div class="row">
-  <div class="medium-2 columns">
 
-	  <span class="labelSwitch" >TL start</span>
-	 <div class="switch round medium">
-	  <input id="TLStart" type="checkbox" onclick="TLStart(this)">
-	  <label for="TLStart"></label>
-	</div> 
-	<span class="labelSwitch">Video</span>
-	 <div class="switch round medium">
-	 <input id="Video" type="checkbox" onclick="VideoF(this)">
-	 <label for="Video"></label>
-	</div>
-  </div>
- <div class="medium-6 columns">
-<!--        ADD Viedo here -->
-  <iframe id="videoFeed" src="default.html" width="330" height="250" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>   
-
-    </ul>
-    
- </div>
-     
-  <div class="medium-4 columns" width="280" height="280">
-     <iframe id="camControl" src="default.html" width="280" height="280" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>  
-  </div>
-  
-
-<!--Closes the row-->
-</div>
-
- 
-<div class="row  postfix-round">
-  <div class="medium-4 columns">
-    <div class="row collapse postfix-round">
-        <div class="small-3 columns ">
-          <input id="TLintervalVal" style="width:75px;" type="text" placeholder="25000">
-        </div>
-        <div class="small-3 columns collapse">
-          <a href="#" class="button postfix round" onclick="setTLInterval()">Go</a>
-        </div>
-        <div class="small-6 columns collapse">
-        </div>
-      </div>
-  </div>
-  <div class="medium-2 columns"></div>
-  <div class="medium-2 columns"></div>
-  <div class="medium-4 columns"></div>
-</div>
+  socket.on('Video', function(Video){
+   socket.emit('CMD', Video);
+    console.log(Video);
+    function puts(error, stdout, stderr) { sys.puts(stdout) }
+    exec('sudo bash ./scripts/' + Video, puts);
+      });
 
 
-<div class="row">
-  <div class="small-2 columns">2 columns</div>
-  <div class="small-10 columns"> 
-   
-  </div>
-</div>
-<div class="row">
-  <div class="small-3 columns">3 columns</div>
-  <div class="small-9 columns">9 columns</div>
-</div>
+  socket.on('REBOOT', function(){
+    function puts(error, stdout, stderr) { sys.puts(stdout) }
+    exec('sudo reboot now');
+    sockets.emit('Info', "Rebooting")
+  });
 
-<div class="row">
-  <div class="medium-4 columns">
-    <span class="labelSwitch">Command: </span>    
-    <span class="labelSwitch" id="CMD">last command</span>
-  </div>
-  <div class="medium-2 columns">
+  socket.on('move', function(dX, dY){
+    //console.log('event: ', dX, dY);
+  //Need a value -100, 100
+  piblaster.setPwm(17, (rescale(parseFloat(dX),-100,100,0.07,0.20)));
+  piblaster.setPwm(4, (rescale(parseFloat(dY),-100,100,0.06,0.19)));
 
-  </div>
-   <div class="medium-2 columns">
-    <span class="labelSwitch" >Folder: </span>    
-    <span class="labelSwitch" id="Folder">Folder</span>
-  </div>
-  <div class="medium-4 columns">
-    <span class="labelSwitch" >Info: </span>    
-    <span class="labelSwitch" id="Info">Info</span>
-  </div>
-    
-</div>
+  //console.log(parseFloat(dX));
+  //console.log(parseFloat(dY));
 
+  //console.log(rescale(parseFloat(dY),-50,50,0.06,0.15));
+  //console.log(rescale(parseFloat(dX),-100,100,0.07,0.20));
+  });
 
-<script src="foundation/js/vendor/jquery.js"></script>
-<script src="foundation/js/foundation.min.js"></script>
-<script>
-    $(document).foundation();
-</script>
+  socket.on('TLInterval', function(T){
+    TLInterval = T;
+    socket.emit('Info', 'timelapse set to ' + T/1000 + 's')
+  });
 
-<script>
- var server = "http://192.168.42.1";
- var port = "999";
- var videoFeedPort = "9000";
- var socket = io();
- //Slide ranges are automatically calculated as percentage of the default config from Arduino
+  function TLF() {
+     var MyDate = new Date();
+     var MyTimeStamp;
+    MyTimeStamp = ('0' + MyDate.getHours()).slice(-2) + '-' + ('0' + (MyDate.getMinutes())).slice(-2) + '-' + ('0' + (MyDate.getSeconds())).slice(-2) ;
 
- 
-    window.onload=function()
-    {
-    document.getElementById("videoFeed").src = server + ':' + videoFeedPort + '/javascript_simple.html';
-    document.getElementById("camControl").src = server + ':' + port + '/vj';
+	 function puts(error, stdout, stderr) { sys.puts(stdout) }
+	  exec('sudo raspistill -w ' + imgWidth + ' -h ' + imgHeight + ' -o ' + TLfolderName + '/' + TLfileName + '_' + MyTimeStamp +  '.jpg  -sh 40 -awb auto -mm average -v');
+        //console.log('sudo raspistill -w ' + imgWidth + ' -h ' + imgHeight + ' -o ' + TLfolderName + '/' + TLfileName + '_' + MyTimeStamp +  '.jpg  -sh 40 -awb auto -mm average -v');
+	socket.emit('Info', TLfileName + '_' + MyTimeStamp +  '.jpg');
+
     }
 
- function VideoF(element){
- 
-  if (element.checked == true) {
-    socket.emit('Video', "cameraON.sh");
-    document.getElementById('videoFeed').src = document.getElementById('videoFeed').src
-    document.getElementById('videoFeed').contentWindow.location.reload(true);    
-  }
-    else
-    {
-    socket.emit('Video', "cameraOFF.sh");   
-  }
- }
-
-  function TLStart(element){
- 
-  if (element.checked == true) {
-    socket.emit('TLStart');
-    //document.getElementById('videoFeed').src = document.getElementById('videoFeed').src
-        
-  }
-    else
-    {
-    socket.emit('TLStop');   
-  }
- }
- 
- 
-  function  setTLInterval(){
-        socket.emit('TLInterval', document.getElementById("TLintervalVal").value);
+  function rescale(x, in_min, in_max, out_min, out_max){
+    var output;
+    output = (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+    //console.log(output);
+    if (output < out_min) {
+      output = out_min;
+    } else if (output > out_max) {
+      output = out_max;
+    } else {
+      //Nothing
     }
- 
- 
- 
-socket.on('Info', function(CMD){
-    document.getElementById("Info").innerHTML = CMD;    
+
+    return output
+
+  }
+
+  var myVar = "";
+  socket.on('TLStart', function(){
+   // function puts(error, stdout, stderr) { sys.puts(stdout) }
+    var MyDate = new Date();
+    var MyDateString;
+    var MyTimeStamp;
+    MyDateString = ('0' + MyDate.getFullYear()).slice(-2) + '-' + ('0' + (MyDate.getMonth()+1)).slice(-2) + '-' + ('0' + (MyDate.getUTCDate())).slice(-2) ;
+    MyTimeStamp = ('0' + MyDate.getHours()).slice(-2) + '-' + ('0' + (MyDate.getMinutes())).slice(-2) + '-' + ('0' + (MyDate.getSeconds())).slice(-2) ;
+
+    TLfolderName = TLFolder + 'TL_' + MyDateString + '_' + MyTimeStamp;
+    TLfileName = 'TL_' + MyDateString;
+    fs.mkdir(TLfolderName);
+    socket.emit('Folder', TLfolderName);
+    //console.log(TLfolderName);
+    myVar = setInterval(function(){TLF()}, TLInterval);
+  });
+
+   socket.on('TLStop', function(){
+    clearInterval(myVar);
+      socket.emit('Info', 'TL stopped');
+
+  });
+
 });
 
-socket.on('Folder', function(CMD){
-    document.getElementById("Folder").innerHTML = CMD;    
+
+http.listen(serverPort, function(){
+console.log('listening on *: ', serverPort);//
+
+
 });
-
-socket.on('CMD', function(CMD){
-    document.getElementById("CMD").innerHTML = CMD;    
-});
-
-socket.on('status', function (y, p, r, b) {
-    document.getElementById("BAL").innerHTML = b;
-    document.getElementById("Pitch").innerHTML = p; 
-}); 
-   
-socket.on('temperatureUpdate', function (temp) {
-    document.getElementById("Temp").innerHTML = temp;
-    
-});
-
-socket.on('cpuUsageUpdate', function (CPU) {
-    document.getElementById("CPU").innerHTML = CPU; 
-});
-
-  socket.on('connected', function(V, ArduRead){
-   
-       });
-
-       
-       
-</script>
-
-</body>
-</html>
