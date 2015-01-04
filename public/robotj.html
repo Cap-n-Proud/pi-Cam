@@ -4,7 +4,7 @@
 		<meta name="viewport">
 		   <script type="text/javascript" src="/js/socket.io.js"></script>
 		   <script type="text/javascript" src="/js/virtualjoystick.js"></script>
-  
+
 		<style>
 		body {
 			overflow	: hidden;
@@ -33,7 +33,7 @@
 			padding		: 5px;
 			margin		: 5px;
 			border-width: 2px;
-			border-style: dashed; 
+			border-style: dashed;
 			-webkit-user-select	: none;
 			-moz-user-select	: none;
 		}
@@ -42,47 +42,64 @@
 	<body>
 		<div id="container" onmouseup="mouseUp()" onmousedown="mouseDown()"></div>
 		<div id="info">
-			
+
 			<span id="result"></span>
-		</div> 
+		</div>
 
 		<script>
-			var prevX, prevY;
+				var dX = 0, dY = 0;
+				var maxX = 100; maxY = 100;
+				var prevX, prevY;
+				var gain = 0.1;
 				var joystick	= new VirtualJoystick({
 				container	: document.getElementById('container'),
 				mouseSupport	: true,
 			});
 			var socket = io();
 			console.log("touchscreen is", VirtualJoystick.touchScreenAvailable() ? "available" : "not available");
-	
-			
-			
-			
+
 			setInterval(function(){
 				if (joystick.deltaX() !=0 || joystick.deltaY() !=0){
-					socket.emit('move', 100 * joystick.deltaX()/250, - 100 * joystick.deltaY()/250);				
+					dX = dX + gain * joystick.deltaX();
+					dY = dY + gain * joystick.deltaY();
+
+					if (dX >= maxX) {
+						dX = maxX;
+					}
+					if ( dX <= -maxX) {
+						dX = -maxX;
+					}
+
+					if (dY >= maxY) {
+						dY = maxY;
+					}
+					if (dY <= -maxY) {
+						dY = -maxY;
+					}
+
+					socket.emit('move',dX, dY);
 				}
 				var outputEl	= document.getElementById('result');
 				outputEl.innerHTML	= '<b>Result:</b> '
-					+ ' dx:'+ 100 * joystick.deltaX()/250
-					+ ' dy:'+  100* joystick.deltaY()/250
+					+ ' dx:'+ parseFloat(Math.round(dX * 100) / 100).toFixed(2)
+					+ ' dy:'+ parseFloat(Math.round(dY * 100) / 100).toFixed(2)
 					+ (joystick.right()	? ' right'	: '')
 					+ (joystick.up()	? ' up'		: '')
 					+ (joystick.left()	? ' left'	: '')
-					+ (joystick.down()	? ' down' 	: '')	
+					+ (joystick.down()	? ' down' 	: '')
 			}, 1/30 * 1000);
-			
-	
+
+
 			function mouseDown() {
 				document.getElementById("container").style.color = "red";
-				
+
 			}
-		
+
 			function mouseUp() {
 			    document.getElementById("container").style.color = "black";
-			    socket.emit('move', 0, 0);			
+			    socket.emit('move', 0, 0);
 			}
-		
+
 		</script>
 	</body>
 </html>
