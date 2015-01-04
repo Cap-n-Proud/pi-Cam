@@ -27,7 +27,7 @@ var express = require('/usr/local/lib/node_modules/express');
 var app = express();
 var http = require('http').Server(app);
 var io = require('/usr/local/lib/node_modules/socket.io')(http);
-var fs = require('/home/pi/node_modules/safefs');
+var fs = require('/usr/local/lib/node_modules/safefs');
 var piblaster = require('/usr/local/lib/node_modules/pi-blaster.js');
 
 var sys = require('sys');
@@ -97,10 +97,10 @@ io.on('connection', function(socket){
 
   socket.on('move', function(dX, dY){
     //console.log('event: ', dX, dY);
-  //piblaster.setPwm(1, (rescale(parseFloat(dX),-100,100,0.07,0.20)));
-  //piblaster.setPwm(0, (rescale(parseFloat(dY),-100,100,0.06,0.19)));
-  console.log(rescale(parseFloat(dY),-50,50,0.06,0.15));
-  console.log(rescale(parseFloat(dX),-100,100,0.07,0.20));
+  piblaster.setPwm(17, (rescale(parseFloat(dX),-100,100,0.07,0.20)));
+  piblaster.setPwm(4, (rescale(parseFloat(dY),-100,100,0.06,0.19)));
+  //console.log(rescale(parseFloat(dY),-50,50,0.06,0.15));
+  //console.log(rescale(parseFloat(dX),-100,100,0.07,0.20));
   });
 
   socket.on('TLInterval', function(T){
