@@ -38,4 +38,5 @@ sudo chmod 0755 /home/pi/Documents
 mkdir /home/pi/Documents/TL
 sudo chmod 0755 /home/pi/Documents/TL
 
+#Need also to install piblaster https://github.com/sarfata/pi-blaster and the js https://github.com/sarfata/pi-blaster.js.git
 exit 0
