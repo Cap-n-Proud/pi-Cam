@@ -268,13 +268,6 @@
         var port = "999";
         var videoFeedPort = "9000";
         var socket = io();
-        //Slide ranges are automatically calculated as percentage of the default config from Arduino
-
-
-        window.onload = function() {
-            document.getElementById("videoFeed").src = server + ':' + videoFeedPort + '/javascript_simple.html';
-            document.getElementById("camControl").src = server + ':' + port + '/vj';
-        }
 
         function VideoF(element) {
 
@@ -337,7 +330,7 @@
         });
        
         socket.on('serverADDR', function(ADDR) {
-	        server = ADDR
+	        server = ADDR.toString();
 	        document.getElementById("videoFeed").src = 'http://' + server + ':' + videoFeedPort + '/javascript_simple.html';
 	        document.getElementById("camControl").src = 'http://' + server + ':' + port + '/vj';
         }); 
