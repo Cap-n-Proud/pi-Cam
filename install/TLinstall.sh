@@ -49,5 +49,6 @@ cd /home/pi/pi-blaster
 ./configure
 sudo make
 sudo make install
+sudo npm install -g pi-blaster.js
 
 exit 0
