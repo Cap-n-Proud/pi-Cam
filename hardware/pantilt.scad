@@ -64,12 +64,18 @@ mirror([0, 10, 0]) support();
 base();
 
 translate([0, 0, -supportZ-supportBaseHeight-baseHeight])
+difference(){
 {difference(){
 	minkowski() {
-cylinder(r= R+mik, h = baseHeight);		
+cylinder(r= R+6, h = baseHeight);		
 rotate([90,0,0])cylinder(r = mik, h = 1);
 }
 
 translate([0, 0, 5])cylinder(r= (R+mik)/2, h = 10*baseHeight);		
 }
+translate([0, 0, 5])cylinder(r= R+mik+2, h = 10*baseHeight);		
+
+
+}
+
 translate([0, 0, 17-3])	box(24.5, 13, 17, 3,"servo");}
