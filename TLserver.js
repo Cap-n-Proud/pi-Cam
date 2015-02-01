@@ -85,7 +85,7 @@ io.on('connection', function(socket){
    socket.emit('CMD', Video);
     console.log(Video);
     function puts(error, stdout, stderr) { sys.puts(stdout) }
-    exec('sudo bash /home/pi/TLServer/scripts/' + Video, puts);
+    exec('sudo bash ./scripts/' + Video, puts);
       });
 
 
