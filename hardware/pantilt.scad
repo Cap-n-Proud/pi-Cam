@@ -1,10 +1,10 @@
-$fn = 250;
+$fn = 150;
 
 R = 50;
 ballShell = 3;
-supportX = 35;
-supportY = 8;
-supportZ = 60;
+supportX = 0.7*R;
+supportY = 0.15*R;
+supportZ = 1.25*R;
 mik = 2;
 sThickness = 5;
 supportBaseHeight = 5;
@@ -60,22 +60,24 @@ translate([0, 0, -supportZ])
 sphere(R);
 support();
 mirror([0, 10, 0]) support();
-//need to understnad -2 in  2*R-5-mik-2
+bottom();
 base();
+module bottom() {
+	translate([0, 0, -supportZ - supportBaseHeight - baseHeight]){
+	difference() {
 
-translate([0, 0, -supportZ-supportBaseHeight-baseHeight])
-difference(){
-{difference(){
-	minkowski() {
-cylinder(r= R+6, h = baseHeight);		
-rotate([90,0,0])cylinder(r = mik, h = 1);
+		difference() {
+			minkowski() {
+				cylinder(r = R + 6, h = baseHeight);
+				rotate([90, 0, 0]) cylinder(r = mik, h = 1);
+			}
+
+			translate([0, 0, 5]) cylinder(r = (R + mik)-2*sThickness, h = 10 * baseHeight);
+		}
+	translate([0, 0, baseHeight-supportBaseHeight]) cylinder(r = R + mik + 2, h = 10*supportBaseHeight);
+	}
+	 
+translate([0, 0, 17 - 3]) box(24.5, 13, 17, 3, "servo");
 }
 
-translate([0, 0, 5])cylinder(r= (R+mik)/2, h = 10*baseHeight);		
 }
-translate([0, 0, 5])cylinder(r= R+mik+2, h = 10*baseHeight);		
-
-
-}
-
-translate([0, 0, 17-3])	box(24.5, 13, 17, 3,"servo");}
