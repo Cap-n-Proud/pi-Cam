@@ -335,6 +335,12 @@
         socket.on('connected', function(V, ArduRead) {
 
         });
+       
+        socket.on('serverADDR', function(ADDR) {
+	        server = ADDR
+	        document.getElementById("videoFeed").src = 'http://' + server + ':' + videoFeedPort + '/javascript_simple.html';
+	        document.getElementById("camControl").src = 'http://' + server + ':' + port + '/vj';
+        }); 
     </script>
 
 </body>
