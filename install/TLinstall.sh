@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# to download the latest repository: git clone https://github.com/pfnegrini/time-lapse-server.git /home/pi/time-lapse-server
+
 asd() {
 cat <<"EOT"
 
@@ -20,7 +22,7 @@ cat <<"EOT"
                 \__-"              "\_/
 
 
-                
+
 EOT
 }
 
@@ -37,5 +39,15 @@ sudo chmod 0755 /home/pi/Documents
 
 mkdir /home/pi/Documents/TL
 sudo chmod 0755 /home/pi/Documents/TL
+
+#Install PiBlaster
+sudo apt-get install -y autoconf
+git clone https://github.com/sarfata/pi-blaster.git /home/pi/pi-blaster
+
+cd /home/pi/pi-blaster
+./autogen.sh
+./configure
+sudo make
+sudo make install
 
 exit 0
