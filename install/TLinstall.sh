@@ -32,11 +32,10 @@ sudo cp TLserver /etc/init.d/TLserver
 sudo chmod 0755 /etc/init.d/TLserver
 sudo update-rc.d TLserver defaults
 
-sudo mkdir /home/pi/Documents
+mkdir /home/pi/Documents
 sudo chmod 0755 /home/pi/Documents
 
-sudo mkdir /home/pi/Documents/TL
+mkdir /home/pi/Documents/TL
 sudo chmod 0755 /home/pi/Documents/TL
 
-#Need also to install piblaster https://github.com/sarfata/pi-blaster and the js https://github.com/sarfata/pi-blaster.js.git
 exit 0
