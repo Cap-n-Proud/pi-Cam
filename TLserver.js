@@ -77,7 +77,9 @@ var mkdirSync = function(path) {
 io.on('connection', function(socket) {
     var myDate = new Date();
     socket.emit('Info', 'Connected ' + myDate.getHours() + ':' + myDate.getMinutes() + ':' + myDate.getSeconds());
+    socket.emit('serverADDR', require('os').networkInterfaces().eth0[0].address);
     console.log('New socket.io connection - id: %s', socket.id);
+    socket.emit('serverADDR', require('os').networkInterfaces().eth0[0].address);
 
     function puts(error, stdout, stderr) {
         sys.puts(stdout)
