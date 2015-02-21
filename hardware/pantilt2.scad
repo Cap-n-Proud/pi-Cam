@@ -1,7 +1,8 @@
-$fn = 200;
+//$fn = 100;
 
-//Make the servo support for tilting thikcer
 
+//Need to fix servo tilt suport issue. The spheric part does not move with the arm when you change xPos parameter
+include <rpi.scad>;
 PIcameraDiam = 8;
 PIcameraX = 25;
 PIcameraY = 25;
@@ -28,6 +29,21 @@ servoHornLenght = 32;
 screwDiam	= 3;
 screwLenght = 10;
 screwTolerance = 0.2;
+
+Piwidth = 56;
+Pilength = 85;
+Piheight = 1.5;
+
+boxLenght = Pilength + mik + 3;
+boxDepth = 2 * R + 10;
+boxHeight = 48;
+
+
+
+
+
+function RatX(x) = sqrt(R * R - (x * x));
+
 
 module box(Xdim, Ydim, Zdim, thickness, application)
 //Creates a box, dimensions are internal
@@ -63,8 +79,7 @@ module base(servo) {
 //-------------------------
 
 module bottom()
-//This creates a support fo rthe pan mechanism if the gimball is to be used to be used standalone
-//Need to add calbe management to connect with the Raspberry or other device
+//This creates a support for the pan mechanism if the gimball is to be used to be used standalone
  {
 	translate([0, 0, -supportZ - supportBaseHeight - baseHeight]) {
 		difference() {
@@ -116,47 +131,77 @@ difference() {
 	}}
 
 }
-//-------------------------
+
 
 module servoTiltSupport(xPos) {
-	//Need to center the servo shaft, the seconf figure is the distance form hthe border
+	//Need to center the servo shaft, the seconf figure is the distance form border
 	supportPosition = xPos;
 	eccentricity = 22.2 / 2 - 5;
 	servoBodySupport = 20;
-	//Need to adjust the clearance to account fo rthe Xpos
-	servoClerance = 27 - 15.5;
+	//Need to adjust the clearance to account for the Xpos
+	servoClerance = 31 - 16 - servoHornThickness;
+	supportCurvature = 30;
+
 	rotate([-0, 0, 0]) difference() {
 
 		union() {
 
 			difference() {
-				translate([-shellThickness / 2 + supportPosition, 0, 15]) cube([shellThickness, 20, 2 * panSupport], center = true);
-
+				translate([-shellThickness / 2 + supportPosition, 0, 15]) {
+					cube([shellThickness, 20, 2 * RatX(gimballWidth / 2)], center = true);
+				}
 				difference() {
-					translate([-shellThickness / 2 + supportPosition, 0, 15]) cube([shellThickness, 20, 2 * panSupport], center = true);
+					translate([-shellThickness / 2 + supportPosition, 0, 15]) cube([shellThickness, 20, 2 * RatX(gimballWidth / 2)], center = true);
+
+
 					//The size of the sphere governs where the servo support will be cut. Need to add tolerance if you wnat to print as one piece with the shell.
-					sphere(panSupport + shellThickness + tolerance);
-				}
-			}
-			translate([-servoBodySupport / 2 + supportPosition, 0, eccentricity]) {
+					sphere(RatX(gimballWidth / 2) + shellThickness + tolerance);
 
-				difference() {
-					cube([servoBodySupport, 12 + shellThickness, 22.2 + shellThickness], center = true);
-					cube([servoBodySupport, 12, 22.2], center = true);
 				}
+
+			}
+
+			translate([-servoBodySupport / 2 + supportPosition, 0, eccentricity]) {
+				//This is the servo box
+				difference() {
+					cube([servoBodySupport, 12 + 1 + shellThickness, 22.2 + 1 + shellThickness], center = true);
+					cube([servoBodySupport, 12 + 1, 22.2 + 1], center = true);
+
+					//Servo cable slot
+					translate([0, 0, -2 * eccentricity]) cube([100, 3, 3], center = true);
+
+				}
+
 			}
 		}
 
+	//This is the slot in the servo arm
 		translate([servoClerance + 10, 0, eccentricity]) {
 
-			cube([20, 12, 32.2], center = true);
-			translate([-31 / 2, 0, 0]) cube([31, 12, 22.2], center = true);
+			cube([20+1, 12, 32.2+1], center = true);
+			translate([-31 / 2, 0, 0]) cube([31+1, 12, 22.2+1], center = true);
 
 		}
 	}
+
+
+translate([0, 0, 0])
+			difference() {
+		translate([3, 0,+ RatX(xPos)-10])
+		difference() {
+			cube([20, 20, 20], center = true);
+			translate([-supportCurvature, 0, -supportCurvature]) sphere(r = supportCurvature + 20);
+		}
+
+		difference() {
+			sphere(RatX(gimballWidth / 2) + 10 * shellThickness + tolerance);
+
+			sphere(RatX(gimballWidth / 2) + shellThickness + tolerance);
+		}
+	}
+
 }
 //-------------------------
-
 module cameraSupport() {
 	difference() {
 		difference() {
@@ -212,7 +257,6 @@ module gimballPivot(tolerance) {
 }
 //-------------------------
 
-//Cut slots for servos and pivot for the gimball
 module support() {
   scaleFactor = (R + tolerance)/R;
 			
@@ -290,8 +334,66 @@ module SUB_cameracableDuct()
 
 
 
-//tiltSupport();
-//support();
-mountedPillar();
+
+
+module connectionSocket ()
+{
+
+cylinder(r=3, h=5);
+translate([-9,-3/2,0])cube([10,3,5]);
+
+}
+
+module mhole ()
+	{
+	cylinder (r=3/2-0.2, h=2*Piheight+8, $fs=0.1);
+	}
+
+
+
+module case(){
+translate([0, 0, -boxHeight  / 2 - supportZ - 2 * supportBaseHeight]) {
+	difference(){
+	minkowski()
+	{
+		box(boxLength, boxDepth, boxHeight, shellThickness - mik, "PI");
+		//sphere(r = mik);
+		cylinder(r=mik, h=2);
+	}
+translate([R-10 , -Piwidth / 2,-boxHeight  / 2 - 5/2 ])connectionSocket ();
+translate([-R+10 , -Piwidth / 2,-boxHeight  / 2 - 5/2 ])connectionSocket ();
+translate([R-10 , Piwidth / 2,-boxHeight  / 2 - 5/2 ])connectionSocket ();
+translate([-R+10 , Piwidth / 2,-boxHeight  / 2 - 5/2 ])connectionSocket ();
+translate([0, 0,-boxHeight  / 2 - 5/2 ])cylinder(r=3,h=5);
+
+
+	translate([-Pilength / 2, -Piwidth / 2, -boxHeight  / 2 + 5 + shellThickness]) {
+		rpi();		
+	}
+}
+translate([-Pilength / 2, -Piwidth / 2, -boxHeight  / 2 + 5 + shellThickness])
+{
+ translate([25.5, 18, -(+5 + shellThickness)]) mhole();
+ translate([length - 5, width - 12.5, -(+5 + shellThickness)]) mhole();
+
+ }
+}
+}
+ 
+
+//mountedPillar();
 //mirror([1, 0, 0])tiltSupport();
 //SUB_mountedPillarScrewHoles();
+//servoTiltSupport(15);
+//cameraSupport();
+
+//translate([-10, 0, 0])
+//support();
+topCoverHeight = 15;
+difference()
+{
+{
+translate([0, 0, -supportZ-supportBaseHeight-topCoverHeight/2])	cube([boxLenght+mik,boxDepth,topCoverHeight], center=true);
+
+}
+}
