@@ -61,10 +61,11 @@ module box(Xdim, Ydim, Zdim, thickness, application)
 	}
 }
 
-
+//Baseplate for pan mechanism
 module base(servo) {
 	difference(){
-		translate([0, 0, -supportZ - supportBaseHeight]) {
+		
+	 {
 		minkowski() {
 			cylinder(r = R + mik, h = supportBaseHeight);
 			rotate([90, 0, 0]) cylinder(r = mik, h = 1);
@@ -78,29 +79,6 @@ module base(servo) {
 }
 //-------------------------
 
-module bottom()
-//This creates a support for the pan mechanism if the gimball is to be used to be used standalone
- {
-	translate([0, 0, -supportZ - supportBaseHeight - baseHeight]) {
-		difference() {
-
-			difference() {
-				minkowski() {
-					cylinder(r = R + 6, h = baseHeight);
-					rotate([90, 0, 0]) cylinder(r = mik, h = 1);
-				}
-
-				translate([0, 0, 5]) cylinder(r = (R + mik) - 2 * shellThickness, h = 10 * baseHeight);
-			}
-			translate([0, 0, baseHeight - supportBaseHeight]) cylinder(r = R + mik + tolerance, h = 10 * supportBaseHeight);
-			translate([0, 0, 0]) cylinder(r = 0.7 * R + mik + 2, h = 10 * supportBaseHeight);
-
-		}
-
-		translate([0, 0, 17 - 3]) box(24.5, 13, 17, 3, "servo");
-	}
-}
-//-------------------------
 
 module supportSection() {
 	intersection() {
@@ -272,7 +250,7 @@ module support() {
 	difference(){
 		
 		{
-			color("blue",0.5)base(true);
+			color("blue",0.5)translate([0, 0, -supportZ - supportBaseHeight])base(true);
 			SUB_cameracableDuct();
 			SUB_servocableDuct();
 			translate([0,0,+supportBaseHeight/2])mirror([1, 0, 0])tiltSupport();
@@ -389,11 +367,17 @@ translate([-Pilength / 2, -Piwidth / 2, -boxHeight  / 2 + 5 + shellThickness])
 
 //translate([-10, 0, 0])
 //support();
+
+
 topCoverHeight = 15;
 difference()
 {
 {
 translate([0, 0, -supportZ-supportBaseHeight-topCoverHeight/2])	cube([boxLenght+mik,boxDepth,topCoverHeight], center=true);
+translate([0, 0, -supportZ - supportBaseHeight]){
+base("false");
+scale([0.8,0.8,30])base("false");
+}
+}
+}
 
-}
-}
