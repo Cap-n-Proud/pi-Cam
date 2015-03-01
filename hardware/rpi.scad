@@ -12,7 +12,7 @@ module ethernet ()
 	//ethernet port 
 	//The +5 is to make a difference and cut the hole for the slot
 	color("silver")
-	translate([length-20 + 5,1.5,height]) cube([21.2,16,13.3]); 
+	translate([length-20 + 10,1.5,height]) cube([21.2,16,13.3]); 
 	}
 
 
@@ -20,7 +20,7 @@ module usb ()
 	{
 	//usb port
 	color("silver")
-	translate([length-9.5,25,height]) cube([17.3,13.3,16]);
+	translate([length-9.5,25,height]) cube([17.3,13.3+2,16]);
 	}
 
 module composite ()
@@ -71,19 +71,19 @@ module hdmi ()
 module power ()
 	{
 	color("silver")
-	translate ([-0.8-5,3.8,height])
-	cube ([5.6+3, 8+3,4.4-height]);
+	translate ([-0.8-10,3.8,height])
+	cube ([5.6+20, 8+4,3+4.4]);
 	}
 
 module sd ()
 	{
 	color ([0,0,0])
 	translate ([0.9, 15.2,-5.2+height ])
-	cube ([16.8+1, 28.5+1, 5.2-height]);
+	cube ([16.8, 28.5, 5.2-height]);
 
 	color ([.2,.2,.7])
 	translate ([-17.3,17.7,-2.9])
-	cube ([32, 24, 2] );
+	cube ([32, 24+1, 2+1] );
 	}
 
 module mhole ()
