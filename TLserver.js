@@ -90,7 +90,7 @@ io.on('connection', function(socket) {
 
     socket.on('Video', function(Video) {
         socket.emit('CMD', Video);
-        console.log(Video);
+        //console.log(Video);
 
         function puts(error, stdout, stderr) {
             sys.puts(stdout)
