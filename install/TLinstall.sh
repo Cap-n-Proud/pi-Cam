@@ -28,6 +28,17 @@ EOT
 
 asd
 
+echo -n "Want to confgure RaspberryPi? [Y/N]"
+read BUILDUP
+
+git clone https://github.com/sarfata/pi-blaster.git /home/pi/pi-blaster
+
+
+if [ "$BUILDUP" == "Y" ]
+then
+  git clone https://github.com/pfnegrini/BuildUP.git /home/pi/BuildUP
+  sudo bash /home/pi/BuildUP/RPi-init.sh
+fi
 
 echo -e "***** Setting up  TLserver *****"
 sudo cp TLserver /etc/init.d/TLserver
@@ -41,6 +52,7 @@ mkdir /home/pi/Documents/TL
 sudo chmod 0755 /home/pi/Documents/TL
 
 #Install PiBlaster
+echo -e "***** Installing PiBLaster *****"
 sudo apt-get install -y autoconf
 git clone https://github.com/sarfata/pi-blaster.git /home/pi/pi-blaster
 
