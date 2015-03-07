@@ -1,8 +1,6 @@
 $fn = 150;
 //Need to fix servo tilt suport issue. The spheric part does not move with the arm when you change xPos parameter
 // RPi supports does not touch the bottom of the case
-
-
 include <rpi.scad>;
 PIcameraDiam = 8;
 PIcameraX = 25;
@@ -32,8 +30,8 @@ servoHornLenght = 32;
 
 servoClerance = 31 - 16 - servoHornThickness;
 eccentricity = 22.2 / 2 - 5;
- servoBodySupport = 20;
-     
+servoBodySupport = 20;
+
 
 screwDiam = 3;
 screwLenght = 10;
@@ -49,64 +47,65 @@ boxHeight = 48;
 boxThickness = 1;
 topCoverHeight = 15;
 
-servoPanZ = boxHeight-20+topCoverHeight-servoClerance;
-servoPanBoxX = (servoX-2*boxThickness-tolerance);
+servoPanZ = boxHeight - 20 + topCoverHeight - servoClerance;
+servoPanBoxX = (servoX - 2 * boxThickness - tolerance);
 servoPanBoxThickness = 2;
+
 function RatX(x) = sqrt(R * R - (x * x));
 
-module panSupport()
-{
-//rotate([0,270,0])servoTiltSupport(15,"pan");
-difference()
-{
-union(){
-color("blue",0.5)multmatrix(m = 
-				[ [1, 0, 0, 0],
-                 [0, 1, 0.4, 0],
-                 [0, 0, 1, 0],
-                 [0, 0, 0,  1]
-               ])cylinder(h = servoPanZ, d1 = boxDepth, d2 = servoY+2*servoPanBoxThickness, center = true);
-translate([0,boxDepth/2-10,-servoPanZ/2+5])cube([boxHeight/2+servoPanBoxX ,20,10],center=true);
-mirror([0,1,0])translate([0,boxDepth/2-10,-servoPanZ/2+5])cube([boxHeight/2+(servoX-2*boxThickness-tolerance),20,10],center=true);
+module panSupport() {
+    //rotate([0,270,0])servoTiltSupport(15,"pan");
+    difference() {
+        union() {
+            color("blue", 0.5) multmatrix(m = [
+                [1, 0, 0, 0],
+                [0, 1, 0.4, 0],
+                [0, 0, 1, 0],
+                [0, 0, 0, 1]
+            ]) cylinder(h = servoPanZ, d1 = boxDepth, d2 = servoY + 2 * servoPanBoxThickness, center = true);
+            //Creates bottom support blocks add -mik to y transaltion if you want to zero the mechanical interference
+            translate([0, boxDepth / 2 - 20 / 2 - mik, -servoPanZ / 2 + 5]) cube([boxHeight / 2 + servoPanBoxX, 20, 10], center = true);
+            mirror([0, 1, 0]) translate([0, boxDepth / 2 - 20 / 2 - mik, -servoPanZ / 2 + 5]) cube([boxHeight / 2 + (servoX - 2 * boxThickness - tolerance), 20, 10], center = true);
+        }
+
+        //Cuts the support from a cylinder
+        translate([boxHeight / 2 + (servoX - 2 * boxThickness - tolerance), 0, 0]) cube([boxHeight, boxDepth + 10, boxHeight - 20 + topCoverHeight - servoClerance], center = true);
+        mirror(1, 0, 0) translate([boxHeight / 2 + (servoX - 2 * boxThickness - tolerance), 0, 0]) cube([boxHeight, boxDepth + 10, boxHeight - 20 + topCoverHeight - servoClerance], center = true);
+
+        color("blue", 0.5) multmatrix(m = [
+            [1, 0, 0, 0],
+            [0, 1, 0.4, 0],
+            [0, 0, 1, 0],
+            [0, 0, 0, 1]
+        ]) cylinder(h = servoPanZ, d1 = boxDepth - 10, d2 = servoY - 10, center = true);
+
+        //Cuts the support to fit case
+        translate([0, +eccentricity, 10]) cube([servoPanBoxX + servoPanBoxThickness + 4, servoY + servoPanBoxThickness + 1.5, 20], center = true);
+        translate([0, -(boxDepth / 2 + 10 - mik), -servoPanZ / 2 + 5]) cube([boxHeight / 2 + servoPanBoxX, 20, 10], center = true);
+
+        //Slot for video
+        translate([0, boxDepth / 2 - 10, -servoPanZ / 2 + 5]) rotate([90, 0, 0]) scale([1.2, 1.5, 1]) cube([8, 20, 20], center = true);
+
+    }
+    rotate([0, 90, 90]) translate([3.25, 0, 0]) miscroServoSupport();
+
 }
 
-translate([boxHeight/2+(servoX-2*boxThickness-tolerance),0,0])cube([boxHeight,boxDepth+10,boxHeight-20+topCoverHeight-servoClerance], center=true);
-mirror(1,0,0)translate([boxHeight/2+(servoX-2*boxThickness-tolerance),0,0])cube([boxHeight,boxDepth+10,boxHeight-20+topCoverHeight-servoClerance], center=true);
-color("blue",0.5)multmatrix(m = 
-				[ [1, 0, 0, 0],
-                 [0, 1, 0.4, 0],
-                 [0, 0, 1, 0],
-                 [0, 0, 0,  1]
-               ])cylinder(h = servoPanZ, d1 = boxDepth-10, d2 = servoY-10, center = true);
-translate([0,+eccentricity,10])cube([servoPanBoxX+servoPanBoxThickness+4,servoY+servoPanBoxThickness,20],center=true);
-translate([0,-(boxDepth/2+10),-servoPanZ/2+5])cube([boxHeight/2+servoPanBoxX ,20,10],center=true);
 
+module miscroServoSupport() {
 
-}
-//h=bxh-20+lidh-basesunk
-//translate([0,0,10])box(servoPanBoxX,servoY,20,servoPanBoxThickness,"servo");
-}
+    translate([-servoBodySupport / 2, 0, eccentricity]) {
+        //This is the servo box
+        difference() {
+            cube([servoBodySupport, 12 + 1 + shellThickness, 22.2 + 1 + shellThickness], center = true);
+            cube([servoBodySupport, 12 + 1, 22.2 + 1], center = true);
 
+            //Servo cable slot
+            translate([0, 0, -2 * eccentricity]) cube([100, 3, 3], center = true);
 
-rotate([0,90,90])miscroServoSupport();
-panSupport();
+        }
 
-
-module miscroServoSupport()
-{
-
-  translate([-servoBodySupport / 2 , 0, eccentricity]) {
-                    //This is the servo box
-                    difference() {
-                        cube([servoBodySupport, 12 + 1 + shellThickness, 22.2 + 1 + shellThickness], center = true);
-                        cube([servoBodySupport, 12 + 1, 22.2 + 1], center = true);
-
-                        //Servo cable slot
-                        translate([0, 0, -2 * eccentricity]) cube([100, 3, 3], center = true);
-
-                    }
-
-                }
+    }
 
 }
 
@@ -117,7 +116,7 @@ module box(Xdim, Ydim, Zdim, thickness, application)
     //Creates a box, dimensions are internal
     {
         difference() {
-            
+
             cube([Xdim + thickness, Ydim + thickness, Zdim], center = true);
             translate([0, 0, thickness / 2]) cube([Xdim, Ydim, Zdim], center = true);
             if (application == "servo") {
@@ -142,15 +141,14 @@ module base(servo) {
                 //This to create a anchoring mechanism with the pan base
                 //translate([0, 0,-mik])cylinder(r = R + mik+3, h = 2);
             }
-            if (servo == true)
-				{ 
-					translate([0, 0, -supportZ - servoHornThickness-mik])rotate([0, 90, 0])servoHorn("cross");
-					cylinder(r=2.5,h=15, center=true);
-				}
+            if (servo == true) {
+                translate([0, 0, -supportZ - servoHornThickness - mik]) rotate([0, 90, 0]) servoHorn("cross");
+                cylinder(r = 2.5, h = 15, center = true);
+            }
         }
     }
     //-------------------------
-	//				translate([0, 0, -supportZ - servoHornThickness-mik])rotate([0, 90, 0])servoHorn("cross");
+    //				translate([0, 0, -supportZ - servoHornThickness-mik])rotate([0, 90, 0])servoHorn("cross");
 
 module supportSection() {
         intersection() {
@@ -198,17 +196,17 @@ module servoTiltSupport(xPos, Pos) {
                     translate([-shellThickness / 2 + supportPosition, 0, 15]) {
                         cube([shellThickness, 20, 2 * RatX(gimballWidth / 2)], center = true);
                     }
-					
-				if(Pos =="tilt"){
-                    difference() {
-                        translate([-shellThickness / 2 + supportPosition, 0, 15]) cube([shellThickness, 20, 2 * RatX(gimballWidth / 2)], center = true);
+
+                    if (Pos == "tilt") {
+                        difference() {
+                            translate([-shellThickness / 2 + supportPosition, 0, 15]) cube([shellThickness, 20, 2 * RatX(gimballWidth / 2)], center = true);
 
 
-                        //The size of the sphere governs where the servo support will be cut. Need to add tolerance if you whant to print as one piece with the shell.
-                        sphere(RatX(gimballWidth / 2) + shellThickness + tolerance);
+                            //The size of the sphere governs where the servo support will be cut. Need to add tolerance if you whant to print as one piece with the shell.
+                            sphere(RatX(gimballWidth / 2) + shellThickness + tolerance);
 
+                        }
                     }
-}
 
                 }
 
@@ -228,47 +226,55 @@ module servoTiltSupport(xPos, Pos) {
 
             //This is the slot in the servo arm
             translate([servoClerance + 10, 0, eccentricity]) {
-			      cube([20 + 1, 12, 32.2 + 1], center = true);
+                cube([20 + 1, 12, 32.2 + 1], center = true);
                 translate([-31 / 2, 0, 0]) cube([31 + 1, 12, 22.2 + 1], center = true);
 
             }
         }
 
-//This is the curved extra support for the connection with the gimball internal shell
-	if(Pos =="tilt")
-	{
-        translate([0, 0, 0])
-        difference() {
-            translate([3, 0, +RatX(xPos) - 10])
+        //This is the curved extra support for the connection with the gimball internal shell
+        if (Pos == "tilt") {
+            translate([0, 0, 0])
             difference() {
-                cube([20, 20, 20], center = true);
-                translate([-supportCurvature, 0, -supportCurvature]) sphere(r = supportCurvature + 20);
-				
+                translate([3, 0, +RatX(xPos) - 10])
+                difference() {
+                    cube([20, 20, 20], center = true);
+                    translate([-supportCurvature, 0, -supportCurvature]) sphere(r = supportCurvature + 20);
+
+                }
+
+                difference() {
+                    sphere(RatX(gimballWidth / 2) + 10 * shellThickness + tolerance);
+
+                    sphere(RatX(gimballWidth / 2) + shellThickness + tolerance);
+
+                }
+
+
             }
+        }
 
-            difference() {
-                sphere(RatX(gimballWidth / 2) + 10 * shellThickness + tolerance);
+        //Dimensions are hardwired, should be parameters!!!
 
-                sphere(RatX(gimballWidth / 2) + shellThickness + tolerance);
+        if (Pos == "pan") {
 
-				}
-		            	
+            translate([2 * shellThickness - 1, 0, 45]) rotate([270, 0, 0]) linear_extrude(height = servoBodySupport, center = true, convexity = 10, twist = 0)
+            polygon([
+                [0, 0],
+                [8, 20],
+                [10, 0]
+            ], convexity = N);
+            mirror([0, 0, 1]) translate([2 * shellThickness - 1, 0, 45]) rotate([270, 0, 0]) linear_extrude(height = servoBodySupport, center = true, convexity = 10, twist = 0) polygon([
+                [0, 0],
+                [7, 28],
+                [10, 30],
+                [10, 0]
+            ], convexity = N);
 
         }
-	}
 
-//Dimensions are hardwired, should be parameters!!!
-
-	if(Pos =="pan"){
-
-		translate([2*shellThickness-1,0,45])rotate([270,0,0])linear_extrude(height = servoBodySupport, center = true, convexity = 10, twist = 0)
-			polygon([[0,0],[8,20],[10,0]], convexity = N);
- 		mirror([0,0,1])translate([2*shellThickness-1,0,45])rotate([270,0,0])linear_extrude(height = servoBodySupport, center = true, convexity = 10, twist = 0)polygon([[0,0],[7,28],[10,30],[10,0]], convexity = N);
- 	
-	}
-
-}
-//-------------------------
+    }
+    //-------------------------
 module cameraSupport() {
         difference() {
             difference() {
@@ -331,28 +337,28 @@ module support() {
         tiltSupport();
 
         translate([gimballWidth / 2 + servoHornThickness / 2, 0, 0]) rotate([45, 0, 0]) servoHorn("line");
-        translate([gimballWidth / 2,0,0])rotate([0,90,0])cylinder(r=2.5,h=30);
+        translate([gimballWidth / 2, 0, 0]) rotate([0, 90, 0]) cylinder(r = 2.5, h = 30);
 
     }
 
     //Need to cut holes in the base for servo and camera cables and the screws
     translate([0, 0, -supportBaseHeight / 2])
-    difference() {	
+    difference() {
 
         {
             color("blue", 0.5) translate([0, 0, -supportZ - supportBaseHeight]) base(true);
-					translate([0, 0, -supportZ - servoHornThickness])rotate([0, 90, 0])servoHorn("cross");
+            translate([0, 0, -supportZ - servoHornThickness]) rotate([0, 90, 0]) servoHorn("cross");
             SUB_cameracableDuct();
             translate([0, 0, +supportBaseHeight / 2]) mirror([1, 0, 0]) tiltSupport();
             SUB_mountedPillarScrewHoles();
-        translate([-gimballWidth / 2-supportX / 2, 0, 0]) rotate([0, 0, 180])
-        SUB_servocableDuct();
+            translate([-gimballWidth / 2 - supportX / 2, 0, 0]) rotate([0, 0, 180])
+            SUB_servocableDuct();
 
-	}
-          
         }
 
     }
+
+}
 
 
 module mountedPillar() {
@@ -363,8 +369,8 @@ module mountedPillar() {
         translate([-gimballWidth / 2, 0, 0]) gimballPivot(3); {
             SUB_cameracableDuct();
             SUB_mountedPillarScrewHoles();
-        translate([-gimballWidth / 2-supportX / 2, 0, -supportX / 2]) rotate([0, 0, 180])
-        SUB_servocableDuct();
+            translate([-gimballWidth / 2 - supportX / 2, 0, -supportX / 2]) rotate([0, 0, 180])
+            SUB_servocableDuct();
         }
 
     }
@@ -386,7 +392,7 @@ module SUB_mountedPillarScrewHoles() {
 
 module SUB_servocableDuct() {
     //Duct for servo cable
-   {
+    {
         translate([0, 0, -supportZ + supportX]) cylinder(r = supportX / 3, h = supportZ + supportX / 2, center = true);
         translate([-supportX, 0, 0]) rotate([0, 120, 0]) cylinder(r = supportX / 3, h = supportX, center = false);
         translate([0, 0, -supportZ - supportX / 3]) rotate([0, 90, 180]) cylinder(r = supportX / 3, h = 0.6 * R, center = false);
@@ -416,21 +422,21 @@ module connectionSocket() {
 }
 
 module PiSupport() {
-	difference()
-	{
-		cube([4 + 3 / 2 - 0.4, 4 + 3 / 2 - 0.2, 4.6], center=true);
-    cylinder(r = 3 / 2 - 0.2, h = 2 * Piheight + 8, $fs = 0.1);
-	}
+    difference() {
+        cube([4 + 3 / 2 - 0.4, 4 + 3 / 2 - 0.2, 4.6], center = true);
+        cylinder(r = 3 / 2 - 0.2, h = 2 * Piheight + 8, $fs = 0.1);
+    }
 
 }
 
 
 
-module case () {
+module
+case () {
     translate([0, 0, -boxHeight / 2 - supportZ - 2 * supportBaseHeight]) {
         difference() {
             minkowski() {
-                box(boxLength, boxDepth, boxHeight, boxThickness , "PI");
+                box(boxLength, boxDepth, boxHeight, boxThickness, "PI");
                 //sphere(r = mik);
                 cylinder(r = mik, h = 2);
             }
@@ -445,72 +451,57 @@ module case () {
                 rpi();
             }
         }
-        translate([-Pilength / 2, -Piwidth / 2, -boxHeight / 2 + 5 + shellThickness]) {
+        translate([-Pilength / 2, -Piwidth / 2, -boxHeight / 2 + 1 + shellThickness]) {
             translate([25.5, 18, 0]) PiSupport();
-            translate ([Pilength-5, Piwidth-12.5, 0]) PiSupport();
+            translate([Pilength - 5, Piwidth - 12.5, 0]) PiSupport();
 
         }
     }
 }
 
 
-module topLid()
-{
-tolerance=0.02;
+module topLid() {
+    tolerance = 0.02;
 
-difference()
-{
-difference() {
-    {
-minkowski(){
-        translate([0, 0, -supportZ - supportBaseHeight - topCoverHeight / 2]) cube([boxLength+mik-1, boxDepth+mik-1, topCoverHeight], center = true);
-sphere(r = mik);//cylinder(r = mik, h = 2);
-}
-        translate([0, 0, -supportZ - supportBaseHeight]) {
-            scale([1 + tolerance, 1 + tolerance, 1])base("false");
-            scale([0.9, 0.9, 30]) base("false");
-//This is the grid an hole for mic.need to re-work the placement definition as it will not work for other box dimensions!!!
-translate([boxLength/2-5-mik-boxThickness, boxDepth/2-7-mik-boxThickness, +14-supportBaseHeight - topCoverHeight / 2])rotate([0,180,0])SUB_Mic();   
+    difference() {
+        difference() {
+            {
+                minkowski() {
+                    translate([0, 0, -supportZ - supportBaseHeight - topCoverHeight / 2]) cube([boxLength + mik - 1, boxDepth + mik - 1, topCoverHeight], center = true);
+                    sphere(r = mik); //cylinder(r = mik, h = 2);
+                }
+                translate([0, 0, -supportZ - supportBaseHeight]) {
+                    scale([1 + tolerance, 1 + tolerance, 1]) base("false");
+                    scale([0.9, 0.9, 30]) base("false");
+                    //This is the grid an hole for mic.need to re-work the placement definition as it will not work for other box dimensions!!!
+                    translate([boxLength / 2 - 5 - mik - boxThickness, boxDepth / 2 - 7 - mik - boxThickness, +14 - supportBaseHeight - topCoverHeight / 2]) rotate([0, 180, 0]) SUB_Mic();
+                }
+
+            }
+
         }
-		
- }
-
-}
 
 
 
-case();
+        case ();
 
-}
+    }
 
 
 
 }
 
-module SUB_Mic()
-{
-translate([-7,0,0])for (i = [1:6]) { 
-translate([i*2,0,0])cube([1,10,2], center=true);
-}
-cylinder(r=5,h=2*topCoverHeight);   
+module SUB_Mic() {
+    translate([-7, 0, 0]) for (i = [1: 6]) {
+        translate([i * 2, 0, 0]) cube([1, 10, 2], center = true);
+    }
+    cylinder(r = 5, h = 2 * topCoverHeight);
 
 }
-
-/*rpi();
-topLid();
-case();
 
 cameraSupport();
 support();
 mountedPillar();
-*/
-//translate([boxLength/2-8-mik-boxThickness, boxDepth/2-8-mik-boxThickness,-supportZ - supportBaseHeight - topCoverHeight / 2])rotate([0,180,0])SUB_Mic();   
-/*difference()
-{
-translate([0,0, -supportZ - supportBaseHeight-30])rotate([0,270,90])servoTiltSupport(15, "pan");
+topLid();
 
-case();
-}
-
-*/
-
+case ();

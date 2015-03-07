@@ -1,6 +1,7 @@
 #!/bin/bash
 
-# to download the latest repository: git clone https://github.com/pfnegrini/time-lapse-server.git /home/pi/time-lapse-server
+# to download the latest repository: 
+#git clone https://github.com/pfnegrini/time-lapse-server.git /home/pi/time-lapse-server
 
 asd() {
 cat <<"EOT"

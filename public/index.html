@@ -302,7 +302,8 @@
         socket.on('Info', function(CMD) {
             document.getElementById("Info").innerHTML = CMD;
         });
-
+        
+       
         socket.on('Folder', function(CMD) {
             document.getElementById("Folder").innerHTML = CMD;
         });
@@ -333,6 +334,7 @@
 	        server = ADDR.toString();
 	        document.getElementById("videoFeed").src = 'http://' + server + ':' + videoFeedPort + '/javascript_simple.html';
 	        document.getElementById("camControl").src = 'http://' + server + ':' + port + '/vj';
+	        document.getElementById("Info").innerHTML = ADDR;
         }); 
     </script>
 
