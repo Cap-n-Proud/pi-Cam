@@ -15,7 +15,7 @@ var prevTel = "";
 var prevPitch = "";
 
 var SEPARATOR = ","
-var version = "0.2";
+var version = "0.5";
 
 var ArduHeader;
 var ArduRead = {};
@@ -76,7 +76,7 @@ var mkdirSync = function(path) {
 
 io.on('connection', function(socket) {
     var myDate = new Date();
-    socket.emit('Info', 'Connected ' + myDate.getHours() + ':' + myDate.getMinutes() + ':' + myDate.getSeconds());
+    socket.emit('connected', 'Connected ' + myDate.getHours() + ':' + myDate.getMinutes() + ':' + myDate.getSeconds()+ ' v' + version + ' @' + require('os').networkInterfaces().eth0[0].address);
     socket.emit('serverADDR', require('os').networkInterfaces().eth0[0].address);
     console.log('New socket.io connection - id: %s', socket.id);
     //socket.emit('serverADDR', require('os').networkInterfaces().eth0[0].address);
@@ -90,12 +90,12 @@ io.on('connection', function(socket) {
 
     socket.on('Video', function(Video) {
         socket.emit('CMD', Video);
-        //console.log(Video);
+        console.log(Video);
 
         function puts(error, stdout, stderr) {
             sys.puts(stdout)
         }
-        exec('sudo bash ./scripts/' + Video, puts);
+        exec('sudo bash /home/pi/time-lapse-server/scripts/' + Video, puts);
     });
 
 
@@ -112,7 +112,7 @@ io.on('connection', function(socket) {
         //Need a value -100, 100
         piblaster.setPwm(17, (rescale(parseFloat(dX), -100, 100, 0.07, 0.20)));
         piblaster.setPwm(4, (rescale(parseFloat(dY), -100, 100, 0.06, 0.19)));
-
+	
         //console.log(parseFloat(dX));
         //console.log(parseFloat(dY));
 
@@ -121,8 +121,8 @@ io.on('connection', function(socket) {
     });
 
     socket.on('TLInterval', function(T) {
-        TLInterval = T;
-        socket.emit('Info', 'timelapse set to ' + T / 1000 + 's')
+        TLInterval = T * 1000;
+        socket.emit('Info', 'timelapse set to ' + T + 's')
     });
 
     function TLF() {
@@ -172,11 +172,13 @@ io.on('connection', function(socket) {
         myVar = setInterval(function() {
             TLF()
         }, TLInterval);
+	socket.emit('Info', 'Time-lapse started');
+
     });
 
     socket.on('TLStop', function() {
         clearInterval(myVar);
-        socket.emit('Info', 'TL stopped');
+        socket.emit('Info', 'Time-lapse stopped');
 
     });
 

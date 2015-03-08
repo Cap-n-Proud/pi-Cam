@@ -13,328 +13,178 @@
     <script type="text/javascript" src="/js/socket.io.js"></script>
     <script src="jquery/lib/jquery-1.7.1.js"></script>
     <script src="jquery/src/rangeinput/rangeinput.js"></script>
-
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/custom.css">
 </head>
-
-<style>
-    body {
-        background: #282828;
-        !important;
-    }
-    .labelSwitch {
-        color: white;
-    }
-    span,
-    output {
-        color: white;
-        text-align: left;
-    }
-    div.switch label {
-        display: block;
-        margin-bottom: 1rem;
-        position: relative;
-        color: white;
-        background: #dddddd;
-        text-indent: 100%;
-        width: 4rem;
-        height: 2rem;
-        cursor: pointer;
-        transition: left 0.15s ease-out;
-    }
-    div.switch input {
-        display: none;
-    }
-    div.switch input + label {
-        margin-left: 0;
-        margin-right: 0;
-    }
-    div.switch label:after {
-        content: "";
-        display: block;
-        background: white;
-        position: absolute;
-        top: .25rem;
-        left: .25rem;
-        width: 1.5rem;
-        height: 1.5rem;
-        -webkit-transition: left 0.15s ease-out;
-        -moz-transition: left 0.15s ease-out;
-        transition: left 0.15s ease-out;
-        -webkit-transform: translate3d(0, 0, 0);
-        -moz-transform: translate3d(0, 0, 0);
-        transform: translate3d(0, 0, 0);
-    }
-    div.switch input:checked + label {
-        background: #008cba;
-    }
-    div.switch input:checked + label:after {
-        left: 2.25rem;
-    }
-    div.switch label {
-        width: 4rem;
-        height: 2rem;
-    }
-    div.switch label:after {
-        width: 1.5rem;
-        height: 1.5rem;
-    }
-    div.switch input:checked + label:after {
-        left: 2.25rem;
-    }
-    div.switch label {
-        color: transparent;
-        background: #dddddd;
-    }
-    div.switch label:after {
-        background: white;
-    }
-    div.switch input:checked + label {
-        background: #008cba;
-    }
-    div.switch.large label {
-        width: 5rem;
-        height: 2.5rem;
-    }
-    div.switch.large label:after {
-        width: 2rem;
-        height: 2rem;
-    }
-    div.switch.large input:checked + label:after {
-        left: 2.75rem;
-    }
-    div.switch.small label {
-        width: 3.5rem;
-        height: 1.75rem;
-    }
-    div.switch.small label:after {
-        width: 1.25rem;
-        height: 1.25rem;
-    }
-    div.switch.small input:checked + label:after {
-        left: 2rem;
-    }
-    div.switch.tiny label {
-        width: 3rem;
-        height: 1.5rem;
-    }
-    div.switch.tiny label:after {
-        width: 1rem;
-        height: 1rem;
-    }
-    div.switch.tiny input:checked + label:after {
-        left: 1.75rem;
-    }
-    div.switch.radius label {
-        border-radius: 4px;
-    }
-    div.switch.radius label:after {
-        border-radius: 3px;
-    }
-    div.switch.round {
-        border-radius: 1000px;
-    }
-    div.switch.round label {
-        border-radius: 2rem;
-    }
-    div.switch.round label:after {
-        border-radius: 2rem;
-    }
-    input[class=PIDControlSlider] {
-        -webkit-appearance: slider-vertical;
-        width: 20px;
-        height: 250px;
-    }
-    input[class=Throttle] {
-        -webkit-appearance: slider-vertical;
-        width: 20px;
-        height: 250px;
-    }
-    input[class=PIDControlSlider]::-webkit-slider-runnable-track {
-        width: 20px;
-        height: 250px;
-        background: #ddd;
-        border: none;
-        border-radius: 3px;
-    }
-    input[class=PIDControlSlider]::-webkit-slider-thumb {
-        -webkit-appearance: slider-vertical;
-        border: none;
-        height: 30px;
-        width: 30px;
-        border-radius: 50%;
-        background: goldenrod;
-        margin-top: -4px;
-    }
-    input[class=PIDControlSlider]:focus {
-        outline: none;
-    }
-    input[class=PIDControlSlider]:focus::-webkit-slider-runnable-track {
-        background: #ccc;
-    }
-</style>
 
 <body>
 
 
-    <div class="row">
-        <div class="medium-2 columns">
 
-            <span class="labelSwitch">TL start</span>
-            <div class="switch round medium">
+<div class="row">
+    <div class="small-3 columns">
+        <div class="row">
+            <h5 class="left">
+                <i class="fa fa-camera fa-2x"></i>
+            </h5>
+            <div class="switch round small right">
                 <input id="TLStart" type="checkbox" onclick="TLStart(this)">
-                <label for="TLStart"></label>
+                    <label for="TLStart"></label>
+                </div>
             </div>
-            <span class="labelSwitch">Video</span>
-            <div class="switch round medium">
-                <input id="Video" type="checkbox" onclick="VideoF(this)">
-                <label for="Video"></label>
-            </div>
-        </div>
-        <div class="medium-6 columns">
-            <!--        ADD Viedo here -->
-            <iframe id="videoFeed" src="default.html" width="330" height="250" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
-
-            </ul>
-
-        </div>
-
-        <div class="medium-4 columns" width="280" height="280">
-            <iframe id="camControl" src="default.html" width="280" height="280" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
-        </div>
-
-
-        <!--Closes the row-->
-    </div>
-
-
-    <div class="row  postfix-round">
-        <div class="medium-4 columns">
-            <div class="row collapse postfix-round">
-                <div class="small-3 columns ">
-                    <input id="TLintervalVal" style="width:75px;" type="text" placeholder="25000">
+            <div class="row collapse">
+                <div class="small-8 columns collapse">
+                    <h5 class="left">
+                        <i class="fa fa-clock-o fa-2x"></i>
+                    </h5>
                 </div>
                 <div class="small-3 columns collapse">
-                    <a href="#" class="button postfix round" onclick="setTLInterval()">Go</a>
+                    <input class=" " id="TLintervalVal" style="width:40px; margin-right:1rem;" type="text" placeholder="sec">
+                    </div>
+                    <div class="small-1 columns collapse">
+                        <a href="#" class="button postfix inline round" style="width:20px" onclick="setTLInterval()"></a>
+                    </div>
                 </div>
-                <div class="small-6 columns collapse">
+                <div class="row">
+                    <h5 class="left">
+                        <i class="fa fa-video-camera  fa-2x"></i>
+                    </h5>
+                    <div class="switch round small right">
+                        <input id="Video" type="checkbox" onclick="VideoF(this)">
+                            <label for="Video"></label>
+                        </div>
                 </div>
+                <!--
+                 <div class="row">
+            <div class="medium-12 columns">
+                <span class="labelSwitch">
+                    <i class="fa fa-terminal"></i>&nbsp;
+                </span>
+                <span class="labelSwitch" id="CMD">last command</span>
+            </div>
+            </div>            
+            
+            
+                 <div class="row">
+            
+            <div class="medium-12 columns">
+                <span class="labelSwitch">
+                    <i class="fa fa-folder-open"></i>&nbsp;
+                </span>
+                <span class="labelSwitch" id="Folder">Folder</span>
+            </div>
+            </div>
+            
+            
+                 <div class="row">
+            
+            <div class="medium-12 columns">
+                <span class="labelSwitch">
+                    <i class="fa fa-info-circle"></i>&nbsp;
+                </span>
+                <span class="labelSwitch" id="Info">Info</span>
+            </div>
+            
+            
+        </div> -->
+      </div>
+                <div class="small-4 columns">
+                    <!--        ADD Video here -->
+                    <iframe id="videoFeed" src="default.html" width="330" height="250" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+                </ul>
+            </div>
+            <div class="small-5 columns" width="280" height="280">
+                <iframe id="camControl" src="default.html" width="280" height="280" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+            </div>
+            <!--Closes the row-->
+        </div>
+        
+        <div class="row"></div>
+        
+        <div class="row">
+            <div class="medium-4 columns">
+                <span class="labelSwitch">
+                    <i class="fa fa-terminal"></i>&nbsp;
+                </span>
+                <span class="labelSwitch" id="CMD">last command</span>
+            </div>
+            <div class="medium-4 columns">
+                <span class="labelSwitch">
+                    <i class="fa fa-folder-open"></i>&nbsp;
+                </span>
+                <span class="labelSwitch" id="Folder">Folder</span>
+            </div>
+            <div class="medium-4 columns">
+                <span class="labelSwitch">
+                    <i class="fa fa-info-circle"></i>&nbsp;
+                </span>
+                <span class="labelSwitch" id="Info">Info</span>
             </div>
         </div>
-        <div class="medium-2 columns"></div>
-        <div class="medium-2 columns"></div>
-        <div class="medium-4 columns"></div>
-    </div>
-
-
-    <div class="row">
-        <div class="small-2 columns">2 columns</div>
-        <div class="small-10 columns">
-
-        </div>
-    </div>
-    <div class="row">
-        <div class="small-3 columns">3 columns</div>
-        <div class="small-9 columns">9 columns</div>
-    </div>
-
-    <div class="row">
-        <div class="medium-4 columns">
-            <span class="labelSwitch">Command: </span>
-            <span class="labelSwitch" id="CMD">last command</span>
-        </div>
-        <div class="medium-2 columns">
-
-        </div>
-        <div class="medium-2 columns">
-            <span class="labelSwitch">Folder: </span>
-            <span class="labelSwitch" id="Folder">Folder</span>
-        </div>
-        <div class="medium-4 columns">
-            <span class="labelSwitch">Info: </span>
-            <span class="labelSwitch" id="Info">Info</span>
-        </div>
-
-    </div>
-
-
-    <script src="foundation/js/vendor/jquery.js"></script>
-    <script src="foundation/js/foundation.min.js"></script>
-    <script>
-        $(document).foundation();
+        <script src="foundation/js/vendor/jquery.js"></script>
+        <script src="foundation/js/foundation.min.js"></script>
+        <script>
+	$(document).foundation();
     </script>
 
+    
+    
     <script>
-        var port = "999";
-        var videoFeedPort = "9000";
-        var socket = io();
+	var port = "999";
+	var videoFeedPort = "9000";
+	var socket = io();
 
-        function VideoF(element) {
+	function VideoF(element) {
 
-            if (element.checked == true) {
-                socket.emit('Video', "cameraON.sh");
+	    if (element.checked == true) {
+		socket.emit('Video', "cameraON.sh");
 
-                document.getElementById('videoFeed').contentWindow.location.reload(true);
-                document.getElementById('videoFeed').src = document.getElementById('videoFeed').src
-            } else {
-                socket.emit('Video', "cameraOFF.sh");
-            }
-        }
+		document.getElementById('videoFeed').contentWindow.location.reload(true);
+		document.getElementById('videoFeed').src = document.getElementById('videoFeed').src
+	    } else {
+		socket.emit('Video', "cameraOFF.sh");
+	    }
+	}
 
-        function TLStart(element) {
+	function TLStart(element) {
 
-            if (element.checked == true) {
-                socket.emit('TLStart');
-                document.getElementById('videoFeed').src = document.getElementById('videoFeed').src
+	    if (element.checked == true) {
+		socket.emit('TLStart');
+		document.getElementById('videoFeed').src = document.getElementById('videoFeed').src
 
-            } else {
-                socket.emit('TLStop');
-            }
-        }
-
-
-        function setTLInterval() {
-            socket.emit('TLInterval', document.getElementById("TLintervalVal").value);
-        }
+	    } else {
+		socket.emit('TLStop');
+	    }
+	}
 
 
+	function setTLInterval() {
+	    socket.emit('TLInterval', document.getElementById("TLintervalVal").value);
+	}
 
-        socket.on('Info', function(CMD) {
-            document.getElementById("Info").innerHTML = CMD;
-        });
-        
-       
-        socket.on('Folder', function(CMD) {
-            document.getElementById("Folder").innerHTML = CMD;
-        });
+	socket.on('Info', function(CMD) {
+	    document.getElementById("Info").innerHTML = CMD;
+	});
+	
+      
+	socket.on('Folder', function(CMD) {
+	    document.getElementById("Folder").innerHTML = CMD;
+	});
 
-        socket.on('CMD', function(CMD) {
-            document.getElementById("CMD").innerHTML = CMD;
-        });
+	socket.on('CMD', function(CMD) {
+	    document.getElementById("CMD").innerHTML = CMD;
+	});
 
-        socket.on('status', function(y, p, r, b) {
-            document.getElementById("BAL").innerHTML = b;
-            document.getElementById("Pitch").innerHTML = p;
-        });
-
-        socket.on('temperatureUpdate', function(temp) {
-            document.getElementById("Temp").innerHTML = temp;
-
-        });
-
-        socket.on('cpuUsageUpdate', function(CPU) {
-            document.getElementById("CPU").innerHTML = CPU;
-        });
-
-        socket.on('connected', function(V, ArduRead) {
-
-        });
-       
-        socket.on('serverADDR', function(ADDR) {
-	        server = ADDR.toString();
-	        document.getElementById("videoFeed").src = 'http://' + server + ':' + videoFeedPort + '/javascript_simple.html';
-	        document.getElementById("camControl").src = 'http://' + server + ':' + port + '/vj';
-	        document.getElementById("Info").innerHTML = ADDR;
-        }); 
+	socket.on('connected', function(info) {
+	  document.getElementById("Info").innerHTML = info;
+	});
+      
+	socket.on('serverADDR', function(ADDR) {
+		server = ADDR.toString();
+		document.getElementById("videoFeed").src = 'http://' + server + ':' + videoFeedPort + '/javascript_simple.html';
+		document.getElementById("camControl").src = 'http://' + server + ':' + port + '/vj';
+		
+	}); 
     </script>
 
 </body>
