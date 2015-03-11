@@ -6,12 +6,12 @@ length = 85;
 height = 1.5;
 
 tolerance = 1;
-extrude = 10;
+
 module ethernet ()
 	{
 	//ethernet port 
 	color("silver")
-	translate([0,width-10.5,height+13.3/2]) cube([21.2,16,13.3], center=true); 
+	translate([length-20 + 10,1.5,height]) cube([21.2,16,13.3]); 
 	}
 
 
@@ -19,18 +19,21 @@ module usb ()
 	{
 	//usb port
 	color("silver")
-	translate([17.3/2+1-extrude,width-29,16/2]) cube([17.3+extrude,13.3+tolerance,16+tolerance], center=true);
-	translate([17.3/2+1-extrude,width-47,16/2]) cube([17.3 + extrude,13.3+tolerance,16+tolerance],center=true);
+	translate([length-9.5,25,height]) cube([17.3,13.3+tolerance,16++tolerance]);
 	}
 
-module 4polesJack ()
+module composite ()
 	{
 	//composite port
-	translate([length-53.5+2.5, width-5+2+extrude/2, height+2.5])
+	translate([length-43.6,width-12,height])
 		{
 		color("yellow")
-		cube([5,10+2*extrude,5], center=true);
-	
+		cube([10,10,13]);
+
+		translate([5,19,8])
+		rotate([90,0,0])
+		color([.9,.9,.9])
+		cylinder(h = 9.3, r = 4.15, $fs=.5);
 		}
 	}
 
@@ -60,23 +63,26 @@ module gpio ()
 module hdmi ()
 	{
 	color ("silver")
-	translate ([length-32,width+2+extrude/2,height])
-	cube([15.1+tolerance,11.7+extrude+tolerance,8-height+tolerance],center=true);
+	translate ([37.1,-1,height])
+	cube([15.1,11.7,8-height]);
 	}
 
 module power ()
 	{
 	color("silver")
-	translate ([length-10.6,width+2+extrude/2,height])
-	cube ([8,5.6+2*extrude,4.4], center=true);
+	translate ([-0.8-10,3.8,height])
+	cube ([5.6+20, 8+4,3+4.4]);
 	}
 
 module sd ()
 	{
+	color ([0,0,0])
+	translate ([0.9, 15.2,-5.2+height ])
+	cube ([16.8, 28.5, 5.2-height]);
 
 	color ([.2,.2,.7])
-	translate ([length+extrude/2,width-28,0])
-	cube ([10+extrude, 10, 4], center=true);
+	translate ([-17.3,17.7,-2.9])
+	cube ([32, 24+1, 2+1] );
 	}
 
 module mhole ()
@@ -91,13 +97,10 @@ module pcb ()
 		color([0.2,0.5,0])
 		linear_extrude(height = height)
 		square([length,width]); //pcb
-translate ([length-3.5, width-3.5,-0.1]) mhole (); 
-translate ([length-3.5, -0+3.5,-0.1]) mhole (); 
-translate ([length+3.5-58, width-3.5,-0.1]) mhole (); 
-translate ([length+3.5-58, 0+3.5,-0.1]) mhole (); 
+		translate ([25.5, 18,-0.1]) mhole (); 
+		translate ([length-5, width-12.5, -0.1]) mhole (); 
 		}
 	}
-
 
 module leds()
 	{
@@ -128,13 +131,13 @@ module rpi ()
 		pcb ();
 		ethernet ();
 		usb (); 
-		4polesJack (); 
-		//audio (); 
-		//gpio (); 
+		composite (); 
+		audio (); 
+		gpio (); 
 		hdmi ();
 		power ();
 		sd ();
-		//leds ();
+		leds ();
 	}
 
-//rpi (); 
+rpi (); 

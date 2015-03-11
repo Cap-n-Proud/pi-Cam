@@ -4,129 +4,173 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TLServer | Welcome</title>
+    <title>CamServer | Welcome</title>
     <link rel="stylesheet" href="foundation/css/foundation.css">
     <script src="foundation/js/vendor/modernizr.js"></script>
-
     <script src="foundation/js/foundation.min.js"></script>
     <script src="foundation/js/foundation.slider.js"></script>
     <script type="text/javascript" src="/js/socket.io.js"></script>
     <script src="jquery/lib/jquery-1.7.1.js"></script>
     <script src="jquery/src/rangeinput/rangeinput.js"></script>
-    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/custom.css">
+    <link rel="text/html" href="favicon.html">
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+  
 </head>
 
 <body>
 
-
-
-<div class="row">
-    <div class="small-3 columns">
-        <div class="row">
-            <h5 class="left">
-                <i class="fa fa-camera fa-2x"></i>
-            </h5>
-            <div class="switch round small right">
-                <input id="TLStart" type="checkbox" onclick="TLStart(this)">
-                    <label for="TLStart"></label>
-                </div>
-            </div>
-            <div class="row collapse">
-                <div class="small-8 columns collapse">
+   <div class="row">
+    <!--
+        <div class="large-3 columns">
+          <h1><img src="http://placehold.it/400x100&text=Logo"/></h1>
+        </div>
+        <div class="large-9 columns">
+          <ul class="right button-group">
+          <li><a href="#" class="button">Link 1</a></li>
+          <li><a href="#" class="button">Link 2</a></li>
+          <li><a href="#" class="button">Link 3</a></li>
+          <li><a href="#" class="button">Link 4</a></li>
+          </ul>
+         </div>
+       </div>
+      
+      <div class="row">
+        <div class="large-12 columns">
+        <div id="slider">
+          <img src="http://placehold.it/1000x400&text=[ img 1 ]"/>
+        </div>
+        
+        <hr/>
+        </div>
+      </div>
+      
+     -->   
+     
+     
+      <div class="row">
+        <div class="large-4 columns">
+           <iframe id="videoFeed" src="default.html" width="330" height="250" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+        </div>
+        
+        <div class="large-4 columns">
+            <iframe id="camControl" src="default.html" width="280" height="280" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+        </div>
+        
+        <div class="large-4 columns">
+               <!-- Begin of commands -->
+               <div class="row">
+                    <div class="small-6 columns">
                     <h5 class="left">
+                        <i class="fa fa-camera fa-2x"></i>
+                    </h5>
+                     <div class="switch round small right"><input id="TLStart" type="checkbox" onclick="TLStart(this)"><label for="TLStart"></label></div>
+
+                    </div>
+                    
+                    <div class="small-3 columns">
+                    &nbsp;
+                    </div>
+                    
+                    <div class="small-3 columns">
+                    &nbsp;
+                    </div>
+               </div>
+                
+                
+               <div class="row">
+                    <div class="small-6 columns">
+                     <h5 class="left">
                         <i class="fa fa-clock-o fa-2x"></i>
                     </h5>
-                </div>
-                <div class="small-3 columns collapse">
-                    <input class=" " id="TLintervalVal" style="width:40px; margin-right:1rem;" type="text" placeholder="sec">
-                    </div>
-                    <div class="small-1 columns collapse">
+                     <div style="float:right; vertical-align:middle;">
+                      <input class="left" id="TLintervalVal" style="text-align:right; width:40px; margin-right:0rem;" type="text" placeholder="sec">
                         <a href="#" class="button postfix inline round" style="width:20px" onclick="setTLInterval()"></a>
+                     </div>
                     </div>
-                </div>
-                <div class="row">
-                    <h5 class="left">
-                        <i class="fa fa-video-camera  fa-2x"></i>
-                    </h5>
-                    <div class="switch round small right">
-                        <input id="Video" type="checkbox" onclick="VideoF(this)">
-                            <label for="Video"></label>
-                        </div>
-                </div>
-                <!--
-                 <div class="row">
-            <div class="medium-12 columns">
-                <span class="labelSwitch">
-                    <i class="fa fa-terminal"></i>&nbsp;
-                </span>
-                <span class="labelSwitch" id="CMD">last command</span>
-            </div>
-            </div>            
-            
-            
-                 <div class="row">
-            
-            <div class="medium-12 columns">
-                <span class="labelSwitch">
-                    <i class="fa fa-folder-open"></i>&nbsp;
-                </span>
-                <span class="labelSwitch" id="Folder">Folder</span>
-            </div>
-            </div>
-            
-            
-                 <div class="row">
-            
-            <div class="medium-12 columns">
-                <span class="labelSwitch">
-                    <i class="fa fa-info-circle"></i>&nbsp;
-                </span>
-                <span class="labelSwitch" id="Info">Info</span>
-            </div>
-            
-            
-        </div> -->
-      </div>
-                <div class="small-4 columns">
-                    <!--        ADD Video here -->
-                    <iframe id="videoFeed" src="default.html" width="330" height="250" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
-                </ul>
-            </div>
-            <div class="small-5 columns" width="280" height="280">
-                <iframe id="camControl" src="default.html" width="280" height="280" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
-            </div>
-            <!--Closes the row-->
-        </div>
-        
-        <div class="row"></div>
-        
-        <div class="row">
-            <div class="medium-4 columns">
-                <span class="labelSwitch">
-                    <i class="fa fa-terminal"></i>&nbsp;
-                </span>
-                <span class="labelSwitch" id="CMD">last command</span>
-            </div>
-            <div class="medium-4 columns">
-                <span class="labelSwitch">
-                    <i class="fa fa-folder-open"></i>&nbsp;
-                </span>
-                <span class="labelSwitch" id="Folder">Folder</span>
-            </div>
-            <div class="medium-4 columns">
-                <span class="labelSwitch">
-                    <i class="fa fa-info-circle"></i>&nbsp;
-                </span>
-                <span class="labelSwitch" id="Info">Info</span>
-            </div>
-        </div>
-        <script src="foundation/js/vendor/jquery.js"></script>
-        <script src="foundation/js/foundation.min.js"></script>
-        <script>
-	$(document).foundation();
-    </script>
+                    
+                    <div class="small-3 columns">
+                    &nbsp;
+                    </div>
+                    
+                    <div class="small-3 columns">
+                    &nbsp;
+                    </div>
+               </div>
+                    
+                
+               <div class="row">
+                    <div class="small-6 columns">
+                      <i class="fa fa-video-camera  fa-2x"></i>
+                      <div class="switch round small right"><input id="Video" type="checkbox" onclick="VideoF(this)"><label for="Video"></label></div>
 
+                    </div>
+                    
+                    <div class="small-3 columns">
+                    &nbsp;
+                    </div>
+                    
+                    <div class="small-3 columns">
+                    &nbsp;
+                    </div>
+               </div>          
+               <!-- End of commands -->      
+        </div>
+         
+         
+         <div class="row">
+            <div class="small-12 columns">
+            
+             <ul class="small-block-grid-2 medium-block-grid-3 large-block-grid-4">
+                <li><span class="labelSwitch">
+                    <i class="fa fa-terminal"></i>
+                </span>
+                <span class="labelSwitch" id="CMD">last command</span></li>
+                <li><span class="labelSwitch">
+                    <i class="fa fa-folder-open"></i>
+                </span>
+                <span class="labelSwitch" id="Folder">Folder</span>
+               
+                </li>
+                <li><span class="labelSwitch">
+                    <i class="fa fa-info-circle"></i>
+                </span>
+                <span class="labelSwitch" id="Info">Info</span></li>
+               </ul>
+            </div>
+         </div>
+       
+      <!--
+      <object name="footer" type="text/html" data="footer.html"></object>
+      This does not apply stiles...
+      
+
+<footer class="row">
+        <div class="large-12 columns">
+          <hr/>
+          <div class="row">
+            <div class="large-6 columns">
+              <p>© Copyright no one at all. Go to town.</p>
+            </div>
+            <div class="large-6 columns">
+              <ul class="inline-list right">
+                <li><a href="#">Link 1</a></li>
+                <li><a href="#">Link 2</a></li>
+                <li><a href="#">Link 3</a></li>
+                <li><a href="#">Link 4</a></li>
+              </ul>
+            </div>
+          </div>
+        </div> 
+</footer>
+      
+      --->
+    
+    
+    
+    
+    
+    
     
     
     <script>

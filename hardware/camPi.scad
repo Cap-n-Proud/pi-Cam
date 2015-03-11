@@ -1,4 +1,4 @@
-$fn = 150;
+//$fn = 150;
 //Need to fix servo tilt suport issue. The spheric part does not move with the arm when you change xPos parameter
 // RPi supports does not touch the bottom of the case
 include <rpi.scad>;
@@ -298,7 +298,7 @@ module cameraSupport() {
         //Need to hardwire the servo dimensions
 
         {
-            servoTiltSupport(gimballWidth / 2, "tilt");
+            servoTiltSupport(15, "tilt");
 
 
         }
@@ -423,7 +423,7 @@ module connectionSocket() {
 
 module PiSupport() {
     difference() {
-        cube([4 + 3 / 2 - 0.4, 4 + 3 / 2 - 0.2, 4.6], center = true);
+        translate([0,0,1])cube([4 + 3 / 2 - 0.4, 4 + 3 / 2 - 0.2, 8], center = true);
         cylinder(r = 3 / 2 - 0.2, h = 2 * Piheight + 8, $fs = 0.1);
     }
 
@@ -431,8 +431,7 @@ module PiSupport() {
 
 
 
-module
-case () {
+module case () {
     translate([0, 0, -boxHeight / 2 - supportZ - 2 * supportBaseHeight]) {
         difference() {
             minkowski() {
@@ -447,18 +446,23 @@ case () {
             translate([0, 0, -boxHeight / 2 - 5 / 2]) cylinder(r = 3, h = 5);
 
 
-            translate([-Pilength / 2, -Piwidth / 2, -boxHeight / 2 + 5 + shellThickness]) {
+translate([-Pilength / 2, -16, -boxHeight / 2 + 5 + shellThickness]) {
                 rpi();
             }
         }
-        translate([-Pilength / 2, -Piwidth / 2, -boxHeight / 2 + 1 + shellThickness]) {
-            translate([25.5, 18, 0]) PiSupport();
-            translate([Pilength - 5, Piwidth - 12.5, 0]) PiSupport();
+        translate([-Pilength / 2, -16, -boxHeight / 2 + 1 + shellThickness]) {
+translate ([Pilength-3.5, Piwidth-3.5,-0.1]) PiSupport(); 
+translate ([Pilength-3.5, -0+3.5,-0.1]) PiSupport();
+translate ([Pilength+3.5-58, Piwidth-3.5,-0.1]) PiSupport(); 
+translate ([Pilength+3.5-58, 0+3.5,-0.1]) PiSupport();
+            //translate([25.5, 18, 0]) PiSupport();
+            //translate([Pilength - 5, Piwidth - 12.5, 0]) PiSupport();
 
         }
+
+
     }
 }
-
 
 module topLid() {
     tolerance = 0.02;
@@ -499,9 +503,21 @@ module SUB_Mic() {
 
 }
 
-cameraSupport();
-support();
-mountedPillar();
-topLid();
 
-case ();
+module assembly(view) 
+{
+
+space = (view == "explode") ? 20 : 0;
+
+translate([-space,0,0])cameraSupport();
+translate([0,0,-space])support();
+translate([-3*space,0,0])mountedPillar();
+translate([0,0,-3*space])topLid();
+
+
+translate([0,0,-4*space-1.5*supportZ])panSupport();
+translate([0,0,-6*space])case ();
+
+}
+
+assembly("explode");
