@@ -103,6 +103,9 @@
                     <div class="small-6 columns">
                       <i class="fa fa-video-camera  fa-2x"></i>
                       <div class="switch round small right"><input id="Video" type="checkbox" onclick="VideoF(this)"><label for="Video"></label></div>
+                      
+                      <a href="#" onclick="camFeedRefresh()" class="button round">Round Button</a>
+
 
                     </div>
                     
@@ -177,24 +180,43 @@
 	var port = "999";
 	var videoFeedPort = "9000";
 	var socket = io();
+	var status = 0;
 
 	function VideoF(element) {
-
-	    if (element.checked == true) {
+	    var status = 0;
+	  if (element.checked == true) {
 		socket.emit('Video', "cameraON.sh");
-
-		document.getElementById('videoFeed').contentWindow.location.reload(true);
-		document.getElementById('videoFeed').src = document.getElementById('videoFeed').src
-	    } else {
+		status =1;
+		//document.getElementById('videoFeed').contentWindow.location.reload(true);
+	  } else {
 		socket.emit('Video', "cameraOFF.sh");
-	    }
+		status =0;
+		}
+	    if (status == 1){
+	     setTimeout(camFeedRefresh, 1000);
+	     }
+	     else
+	     {
+	     setTimeout(camOFF, 1000);
+	
+	     }
 	}
-
+	
+	function camFeedRefresh(){
+	    document.getElementById('videoFeed').src = 	document.getElementById("videoFeed").src = 'http://' + server + ':' + videoFeedPort + '/javascript_simple.html';
+	
+	}
+	
+	function camOFF(){
+	   document.getElementById('videoFeed').src = "default.html";
+	 
+	}
+	
 	function TLStart(element) {
 
 	    if (element.checked == true) {
 		socket.emit('TLStart');
-		document.getElementById('videoFeed').src = document.getElementById('videoFeed').src
+		document.getElementById('videoFeed').src = document.getElementById('videoFeed').src;
 
 	    } else {
 		socket.emit('TLStop');
