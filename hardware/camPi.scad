@@ -1,4 +1,4 @@
-$fn = 150;
+$fn = 250;
 //Need to fix servo tilt suport issue. The spheric part does not move with the arm when you change xPos parameter
 // RPi supports does not touch the bottom of the case
 include <rpi.scad>;
@@ -53,6 +53,10 @@ servoPanBoxThickness = 2;
 
 function RatX(x) = sqrt(R * R - (x * x));
 
+
+
+
+//---------------------------------------
 module panSupport() {
     //rotate([0,270,0])servoTiltSupport(15,"pan");
     difference() {
@@ -443,25 +447,31 @@ module case () {
             translate([-R + 10, -Piwidth / 2, -boxHeight / 2 - 5 / 2]) connectionSocket();
             translate([R - 10, Piwidth / 2, -boxHeight / 2 - 5 / 2]) connectionSocket();
             translate([-R + 10, Piwidth / 2, -boxHeight / 2 - 5 / 2]) connectionSocket();
+
             translate([0, 0, -boxHeight / 2 - 5 / 2]) cylinder(r = 3, h = 5);
 
 
 translate([-Pilength / 2, -16, -boxHeight / 2 + 5 + shellThickness]) {
                 rpi();
             }
+//This is the power inlet. The +6 in z is half the z-lenght of the component
+translate([-boxLength/2,-boxDepth/2+8,-boxHeight/2+shellThickness+2*mik+tolerance])cube([15+tolerance,9+tolerance,12], center=true);
+
         }
         translate([-Pilength / 2, -16, -boxHeight / 2 + 1 + shellThickness]) {
 translate ([Pilength-3.5, Piwidth-3.5,-0.1]) PiSupport(); 
 translate ([Pilength-3.5, -0+3.5,-0.1]) PiSupport();
-translate ([Pilength+3.5-58, Piwidth-3.5,-0.1]) PiSupport(); 
-translate ([Pilength+3.5-58, 0+3.5,-0.1]) PiSupport();
-            //translate([25.5, 18, 0]) PiSupport();
+translate ([Pilength-58, Piwidth-3.5,-0.1]) PiSupport(); 
+translate ([Pilength-58, 0+3.5,-0.1]) PiSupport();
+          //translate([25.5, 18, 0]) PiSupport();
             //translate([Pilength - 5, Piwidth - 12.5, 0]) PiSupport();
 
         }
 
 
     }
+translate([-boxLength/2+15/2+mik,-boxDepth/2+8,-supportZ-boxHeight-4])rotate([0,0,180])SUB_Power();
+  
 }
 
 module topLid() {
@@ -503,7 +513,12 @@ module SUB_Mic() {
 
 }
 
-
+module SUB_Power(){
+	difference(){	
+		cube([15,9+3,12], center=true);
+		translate([2,0,2])cube([15+tolerance,9+tolerance,12], center=true);
+	}
+}
 module assembly(view) 
 {
 
@@ -520,4 +535,6 @@ translate([0,0,-6*space])case ();
 
 }
 
-assembly("explode");
+//assembly("");
+case();
+//SUB_Power();

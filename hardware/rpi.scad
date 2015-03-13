@@ -5,13 +5,13 @@ width = 56;
 length = 85;
 height = 1.5;
 
-tolerance = 1;
+T = 1;
 extrude = 10;
 module ethernet ()
 	{
 	//ethernet port 
 	color("silver")
-	translate([0,width-10.5,height+13.3/2]) cube([21.2,16,13.3], center=true); 
+	translate([0,width-10.5,height+13.3/2]) cube([21.2,16+T,13.3+T], center=true); 
 	}
 
 
@@ -19,8 +19,8 @@ module usb ()
 	{
 	//usb port
 	color("silver")
-	translate([17.3/2+1-extrude,width-29,16/2]) cube([17.3+extrude,13.3+tolerance,16+tolerance], center=true);
-	translate([17.3/2+1-extrude,width-47,16/2]) cube([17.3 + extrude,13.3+tolerance,16+tolerance],center=true);
+	translate([17.3/2+1-extrude,width-29,16/2]) cube([17.3+extrude,13.3+T,16+T], center=true);
+	translate([17.3/2+1-extrude,width-47,16/2]) cube([17.3 + extrude,13.3+T,16+T],center=true);
 	}
 
 module 4polesJack ()
@@ -29,7 +29,7 @@ module 4polesJack ()
 	translate([length-53.5+2.5, width-5+2+extrude/2, height+2.5])
 		{
 		color("yellow")
-		cube([5,10+2*extrude,5], center=true);
+		cube([5+T,10+2*extrude,5+T], center=true);
 	
 		}
 	}
@@ -60,15 +60,15 @@ module gpio ()
 module hdmi ()
 	{
 	color ("silver")
-	translate ([length-32,width+2+extrude/2,height])
-	cube([15.1+tolerance,11.7+extrude+tolerance,8-height+tolerance],center=true);
+	translate ([length-32,width+2+extrude/2,height+4])
+	cube([15.1+T,11.7+extrude+T,8+T],center=true);
 	}
 
 module power ()
 	{
 	color("silver")
-	translate ([length-10.6,width+2+extrude/2,height])
-	cube ([8,5.6+2*extrude,4.4], center=true);
+	translate ([length-10.6,width+0+extrude/2,height+2.2])
+	cube ([8+T,5.6+2*extrude,4.4+T], center=true);
 	}
 
 module sd ()
@@ -76,12 +76,12 @@ module sd ()
 
 	color ([.2,.2,.7])
 	translate ([length+extrude/2,width-28,0])
-	cube ([10+extrude, 10, 4], center=true);
+	cube ([10+T+extrude, 10+T, 4], center=true);
 	}
 
 module mhole ()
 	{
-	cylinder (r=3/2, h=height+.2, $fs=0.1);
+	cylinder (r=3/2, h=height+5, $fs=0.1, center = true);
 	}
 
 module pcb ()
@@ -91,10 +91,10 @@ module pcb ()
 		color([0.2,0.5,0])
 		linear_extrude(height = height)
 		square([length,width]); //pcb
-translate ([length-3.5, width-3.5,-0.1]) mhole (); 
-translate ([length-3.5, -0+3.5,-0.1]) mhole (); 
-translate ([length+3.5-58, width-3.5,-0.1]) mhole (); 
-translate ([length+3.5-58, 0+3.5,-0.1]) mhole (); 
+translate ([length-3.5, width-3.5,0]) mhole (); 
+translate ([length-3.5, -0+3.5,0]) mhole (); 
+translate ([length-58, width-3.5,0]) mhole (); 
+translate ([length-58, 0+3.5,0]) mhole (); 
 		}
 	}
 
@@ -137,4 +137,4 @@ module rpi ()
 		//leds ();
 	}
 
-//rpi (); 
+//rpi(); 
