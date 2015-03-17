@@ -51,6 +51,9 @@ var TLimgHeight = 1944; //# Max = 1944
 var SNimgWidth = 320; // Max = 2592
 var SNimgHeight = 240; //# Max = 1944
 
+var TLinProgress = false;
+var VideoinProgress = false;
+
 
 var TLInterval = 10000;
 
@@ -212,6 +215,8 @@ io.on('connection', function(socket) {
     });
 
     socket.on('takeSnapShot', function() {
+      //Need to check if the camera is in use and stop the services use the variables var TLinProgress = false;
+
 	snapShot(SNimgWidth, SNimgHeight, SNFolder, 'SN_' + timeStamp());
     
     });
