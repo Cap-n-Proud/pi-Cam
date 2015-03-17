@@ -1,4 +1,4 @@
-$fn = 250;
+//$fn = 250;
 //Need to fix servo tilt suport issue. The spheric part does not move with the arm when you change xPos parameter
 // RPi supports does not touch the bottom of the case
 include <rpi.scad>;
@@ -55,9 +55,48 @@ function RatX(x) = sqrt(R * R - (x * x));
 
 
 
-
 //---------------------------------------
 module panSupport() {
+    //rotate([0,270,0])servoTiltSupport(15,"pan");
+    difference() {
+        union() {
+            color("blue", 0.5) multmatrix(m = [
+                [1, 0, 0, 0],
+                [0, 1, 0.4, 0],
+                [0, 0, 1, 0],
+                [0, 0, 0, 1]
+            ]) cylinder(h = servoPanZ, d1 = boxDepth, d2 = servoY + 2 * servoPanBoxThickness, center = true);
+            //Creates bottom support blocks add -mik to y transaltion if you want to zero the mechanical interference
+            translate([0, boxDepth / 2 - 20 / 2 - mik, -servoPanZ / 2 + 5]) cube([boxHeight / 2 + servoPanBoxX, 20, 10], center = true);
+            mirror([0, 1, 0]) translate([0, boxDepth / 2 - 20 / 2 - mik, -servoPanZ / 2 + 5]) cube([boxHeight / 2 + (servoX - 2 * boxThickness - tolerance), 20, 10], center = true);
+        }
+
+        //Cuts the support from a cylinder
+        translate([boxHeight / 2 + (servoX - 2 * boxThickness - tolerance), 0, 0]) cube([boxHeight, boxDepth + 10, boxHeight - 20 + topCoverHeight - servoClerance], center = true);
+        mirror(1, 0, 0) translate([boxHeight / 2 + (servoX - 2 * boxThickness - tolerance), 0, 0]) cube([boxHeight, boxDepth + 10, boxHeight - 20 + topCoverHeight - servoClerance], center = true);
+
+        color("blue", 0.5) multmatrix(m = [
+            [1, 0, 0, 0],
+            [0, 1, 0.4, 0],
+            [0, 0, 1, 0],
+            [0, 0, 0, 1]
+        ]) cylinder(h = servoPanZ, d1 = boxDepth - 10, d2 = servoY - 10, center = true);
+
+        //Cuts the support to fit case
+        translate([0, +eccentricity, 10]) cube([servoPanBoxX + servoPanBoxThickness + 4, servoY + servoPanBoxThickness + 1.5, 20], center = true);
+        translate([0, -(boxDepth / 2 + 10 - mik), -servoPanZ / 2 + 5]) cube([boxHeight / 2 + servoPanBoxX, 20, 10], center = true);
+
+        //Slot for video
+        translate([0, boxDepth / 2 - 10, -servoPanZ / 2 + 5]) rotate([90, 0, 0]) scale([1.2, 1.5, 1]) cube([8, 20, 20], center = true);
+
+    }
+    rotate([0, 90, 90]) translate([3.25, 0, 0]) miscroServoSupport();
+
+}
+
+//--------------------------------------- 
+//This was the verion for RPi v1
+module panSupportOLD() {
     //rotate([0,270,0])servoTiltSupport(15,"pan");
     difference() {
         union() {
@@ -461,7 +500,7 @@ translate([-boxLength/2,-boxDepth/2+8,-boxHeight/2+shellThickness+2*mik+toleranc
         translate([-Pilength / 2, -16, -boxHeight / 2 + 1 + shellThickness]) {
 translate ([Pilength-3.5, Piwidth-3.5,-0.1]) PiSupport(); 
 translate ([Pilength-3.5, -0+3.5,-0.1]) PiSupport();
-translate ([Pilength-58, Piwidth-3.5,-0.1]) PiSupport(); 
+translate ([Pilength-58-3.5, Piwidth-3.5,-0.1]) PiSupport(); 
 translate ([Pilength-58, 0+3.5,-0.1]) PiSupport();
           //translate([25.5, 18, 0]) PiSupport();
             //translate([Pilength - 5, Piwidth - 12.5, 0]) PiSupport();
@@ -537,4 +576,5 @@ translate([0,0,-6*space])case ();
 
 //assembly("");
 case();
+panSupport();
 //SUB_Power();

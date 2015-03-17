@@ -5,8 +5,12 @@ width = 56;
 length = 85;
 height = 1.5;
 
-T = 1;
+T = 2;
+HDMI_plug = 0;
+Power_plug = 0;
+4poles_plug= 0;
 extrude = 10;
+
 module ethernet ()
 	{
 	//ethernet port 
@@ -19,18 +23,17 @@ module usb ()
 	{
 	//usb port
 	color("silver")
-	translate([17.3/2+1-extrude,width-29,16/2]) cube([17.3+extrude,13.3+T,16+T], center=true);
-	translate([17.3/2+1-extrude,width-47,16/2]) cube([17.3 + extrude,13.3+T,16+T],center=true);
+	translate([17.3/2+1-extrude,width-29,16/2+height+1]) cube([17.3+extrude,13.3+T,16+T], center=true);
+	translate([17.3/2+1-extrude,width-47,16/2+height+1]) cube([17.3 + extrude,13.3+T,16+T],center=true);
 	}
 
 module 4polesJack ()
 	{
 	//composite port
-	translate([length-53.5+2.5, width-5+2+extrude/2, height+2.5])
+	translate([length-53.5, width-5+2+extrude/2, height+2.5+(5/2+T+4poles_plug)/2])
 		{
 		color("yellow")
-		cube([5+T,10+2*extrude,5+T], center=true);
-	
+		rotate([90,0,0])cylinder(r=5/2+T+4poles_plug,h=10+2*extrude, center=true);
 		}
 	}
 
@@ -61,14 +64,14 @@ module hdmi ()
 	{
 	color ("silver")
 	translate ([length-32,width+2+extrude/2,height+4])
-	cube([15.1+T,11.7+extrude+T,8+T],center=true);
+	cube([15.1+T+HDMI_plug,11.7+extrude,8+T+HDMI_plug],center=true);
 	}
 
 module power ()
 	{
 	color("silver")
 	translate ([length-10.6,width+0+extrude/2,height+2.2])
-	cube ([8+T,5.6+2*extrude,4.4+T], center=true);
+	cube ([8+T+Power_plug,5.6+2*extrude,4.4+T+Power_plug], center=true);
 	}
 
 module sd ()
@@ -76,7 +79,7 @@ module sd ()
 
 	color ([.2,.2,.7])
 	translate ([length+extrude/2,width-28,0])
-	cube ([10+T+extrude, 10+T, 4], center=true);
+	cube ([10+T+extrude, 10+T, 4+T], center=true);
 	}
 
 module mhole ()
@@ -93,8 +96,8 @@ module pcb ()
 		square([length,width]); //pcb
 translate ([length-3.5, width-3.5,0]) mhole (); 
 translate ([length-3.5, -0+3.5,0]) mhole (); 
-translate ([length-58, width-3.5,0]) mhole (); 
-translate ([length-58, 0+3.5,0]) mhole (); 
+translate ([length-58-3.5, width-3.5,0]) mhole (); 
+translate ([length-58-3.5, 0+3.5,0]) mhole (); 
 		}
 	}
 

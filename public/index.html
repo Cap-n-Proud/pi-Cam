@@ -61,8 +61,9 @@
                <!-- Begin of commands -->
                <div class="row">
                     <div class="small-6 columns">
+                    
                     <h5 class="left">
-                        <i class="fa fa-camera fa-2x"></i>
+		      <i class="fa fa-clock-o fa-2x"></i>
                     </h5>
                      <div class="switch round small right"><input id="TLStart" type="checkbox" onclick="TLStart(this)"><label for="TLStart"></label></div>
 
@@ -70,6 +71,7 @@
                     
                     <div class="small-3 columns">
                     &nbsp;
+                    
                     </div>
                     
                     <div class="small-3 columns">
@@ -81,7 +83,7 @@
                <div class="row">
                     <div class="small-6 columns">
                      <h5 class="left">
-                        <i class="fa fa-clock-o fa-2x"></i>
+                        <i class="fa fa-refresh fa-2x"></i>
                     </h5>
                      <div style="float:right; vertical-align:middle;">
                       <input class="left" id="TLintervalVal" style="text-align:right; width:40px; margin-right:0rem;" type="text" placeholder="sec">
@@ -104,8 +106,7 @@
                       <i class="fa fa-video-camera  fa-2x"></i>
                       <div class="switch round small right"><input id="Video" type="checkbox" onclick="VideoF(this)"><label for="Video"></label></div>
                       
-                      <a href="#" onclick="camFeedRefresh()" class="button round">Round Button</a>
-
+         
 
                     </div>
                     
@@ -116,6 +117,22 @@
                     <div class="small-3 columns">
                     &nbsp;
                     </div>
+               </div>  
+               <div class="row" style="float:center; vertical-align:middle;" >
+                    <div class="small-6 columns">
+                      
+                      <a href="#" onclick="takeSnapshot()" class="button round"> <i class="fa fa-picture-o  fa-2x"></i></a>
+
+
+                    </div>
+                               <div class="small-3 columns">
+                    &nbsp;
+                    </div>
+                    
+                    <div class="small-3 columns">
+                    &nbsp;
+                    </div>
+                    
                </div>          
                <!-- End of commands -->      
         </div>
@@ -210,6 +227,12 @@
 	function camOFF(){
 	   document.getElementById('videoFeed').src = "default.html";
 	 
+	}
+	
+	
+	
+	function takeSnapshot(element) {
+	  socket.emit('takeSnapShot');	
 	}
 	
 	function TLStart(element) {

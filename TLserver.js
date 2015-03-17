@@ -3,6 +3,7 @@
 var events = require('events');
 var eventEmitter = new events.EventEmitter();
 var TLFolder = "/home/pi/Documents/TL/"
+var SNFolder = "/home/pi/Documents/SN/"
 
 
 var serPort = "/dev/ttyACM0";
@@ -15,7 +16,7 @@ var prevTel = "";
 var prevPitch = "";
 
 var SEPARATOR = ","
-var version = "0.5";
+var version = "0.6";
 
 var ArduHeader;
 var ArduRead = {};
@@ -29,12 +30,30 @@ var io = require('/usr/local/lib/node_modules/socket.io')(http);
 var fs = require('/usr/local/lib/node_modules/safefs');
 var piblaster = require('/usr/local/lib/node_modules/pi-blaster.js');
 
+var PiFastGpio = require('/usr/local/lib/node_modules/pi-fast-gpio//index.js');
+
+var SERVO_1_GPIO = 4;
+var SERVO_2_GPIO = 18;
+var HOST = '127.0.0.1';
+var PORT = 8888;
+
+var pw = 2000; // pulsewidth in microseconds
+var change = 20;
+
+var gpio = new PiFastGpio();
+
 var sys = require('sys');
 var exec = require('child_process').exec;
 
-var imgWidth = 2592; // Max = 2592
-var imgHeight = 1944; //# Max = 1944
+var TLimgWidth = 2592; // Max = 2592
+var TLimgHeight = 1944; //# Max = 1944
+
+var SNimgWidth = 320; // Max = 2592
+var SNimgHeight = 240; //# Max = 1944
+
+
 var TLInterval = 10000;
+
 
 app.use(express.static(__dirname + '/public'));
 // Routers
@@ -74,6 +93,7 @@ var mkdirSync = function(path) {
     }
 }
 
+
 io.on('connection', function(socket) {
     var myDate = new Date();
     socket.emit('connected', 'Connected ' + myDate.getHours() + ':' + myDate.getMinutes() + ':' + myDate.getSeconds()+ ' v' + version + ' @' + require('os').networkInterfaces().eth0[0].address);
@@ -110,9 +130,12 @@ io.on('connection', function(socket) {
     socket.on('move', function(dX, dY) {
         //console.log('event: ', dX, dY);
         //Need a value -100, 100
-        piblaster.setPwm(17, (rescale(parseFloat(dX), -100, 100, 0.07, 0.20)));
-        piblaster.setPwm(4, (rescale(parseFloat(dY), -100, 100, 0.06, 0.19)));
+        //piblaster.setPwm(17, (rescale(parseFloat(dX), -100, 100, 0.07, 0.20)));
+        //piblaster.setPwm(4, (rescale(parseFloat(dY), -100, 100, 0.06, 0.19)));
 	
+	gpio.setServoPulsewidth(SERVO_1_GPIO, rescale(parseFloat(dX), -100, 100, 1000, 2000));
+	gpio.setServoPulsewidth(SERVO_2_GPIO, rescale(parseFloat(dY), -100, 100, 1000, 2000));
+      
         //console.log(parseFloat(dX));
         //console.log(parseFloat(dY));
 
@@ -125,17 +148,28 @@ io.on('connection', function(socket) {
         socket.emit('Info', 'timelapse set to ' + T + 's')
     });
 
-    function TLF() {
-        var MyDate = new Date();
+    
+    function timeStamp(){
+      
+     var MyDate = new Date();
+        var MyDateString;
         var MyTimeStamp;
+        MyDateString = ('0' + MyDate.getFullYear()).slice(-2) + '-' + ('0' + (MyDate.getMonth() + 1)).slice(-2) + '-' + ('0' + (MyDate.getUTCDate())).slice(-2);
         MyTimeStamp = ('0' + MyDate.getHours()).slice(-2) + '-' + ('0' + (MyDate.getMinutes())).slice(-2) + '-' + ('0' + (MyDate.getSeconds())).slice(-2);
 
-        function puts(error, stdout, stderr) {
+      return MyDateString + '_' + MyTimeStamp      
+    }
+    
+    
+    function snapShot(imgWidth, imgHeight, folderName, fileName) {
+       
+      function puts(error, stdout, stderr) {
             sys.puts(stdout)
         }
-        exec('sudo raspistill -w ' + imgWidth + ' -h ' + imgHeight + ' -o ' + TLfolderName + '/' + TLfileName + '_' + MyTimeStamp + '.jpg  -sh 40 -awb auto -mm average -v');
+        exec('sudo raspistill -w ' + imgWidth + ' -h ' + imgHeight + ' -o ' + folderName + '/' + fileName + '.jpg  -sh 40 -awb auto -mm average -v');
         //console.log('sudo raspistill -w ' + imgWidth + ' -h ' + imgHeight + ' -o ' + TLfolderName + '/' + TLfileName + '_' + MyTimeStamp +  '.jpg  -sh 40 -awb auto -mm average -v');
-        socket.emit('Info', TLfileName + '_' + MyTimeStamp + '.jpg');
+        socket.emit('Info', fileName + '.jpg');
+	  socket.emit('Folder', folderName);
 
     }
 
@@ -158,19 +192,14 @@ io.on('connection', function(socket) {
     var myVar = "";
     socket.on('TLStart', function() {
         // function puts(error, stdout, stderr) { sys.puts(stdout) }
-        var MyDate = new Date();
-        var MyDateString;
-        var MyTimeStamp;
-        MyDateString = ('0' + MyDate.getFullYear()).slice(-2) + '-' + ('0' + (MyDate.getMonth() + 1)).slice(-2) + '-' + ('0' + (MyDate.getUTCDate())).slice(-2);
-        MyTimeStamp = ('0' + MyDate.getHours()).slice(-2) + '-' + ('0' + (MyDate.getMinutes())).slice(-2) + '-' + ('0' + (MyDate.getSeconds())).slice(-2);
-
-        TLfolderName = TLFolder + 'TL_' + MyDateString + '_' + MyTimeStamp;
-        TLfileName = 'TL_' + MyDateString;
+       
+        TLfolderName = TLFolder + 'TL_' + timeStamp();
+        TLfileName = 'TL_' + timeStamp();
         fs.mkdir(TLfolderName);
         socket.emit('Folder', TLfolderName);
         //console.log(TLfolderName);
         myVar = setInterval(function() {
-            TLF()
+            snapShot(TLimgWidth, TLimgHeight, TLfolderName, TLfileName)
         }, TLInterval);
 	socket.emit('Info', 'Time-lapse started');
 
@@ -180,6 +209,11 @@ io.on('connection', function(socket) {
         clearInterval(myVar);
         socket.emit('Info', 'Time-lapse stopped');
 
+    });
+
+    socket.on('takeSnapShot', function() {
+	snapShot(SNimgWidth, SNimgHeight, SNFolder, 'SN_' + timeStamp());
+    
     });
 
 });

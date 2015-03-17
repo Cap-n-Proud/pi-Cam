@@ -52,6 +52,9 @@ sudo chmod 0755 /home/pi/Documents
 mkdir /home/pi/Documents/TL
 sudo chmod 0755 /home/pi/Documents/TL
 
+mkdir /home/pi/Documents/SN
+sudo chmod 0755 /home/pi/Documents/SN
+
 #Install PiBlaster
 echo -e "***** Installing PiBLaster *****"
 sudo apt-get install -y autoconf
