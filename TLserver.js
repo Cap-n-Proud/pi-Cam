@@ -35,6 +35,7 @@ var PiFastGpio = require('/usr/local/lib/node_modules/pi-fast-gpio//index.js');
 var SERVO_1_GPIO = 4;
 var SERVO_2_GPIO = 18;
 var HOST = '127.0.0.1';
+var serverADDR = 'N/A';
 var PORT = 8888;
 
 var pw = 2000; // pulsewidth in microseconds
@@ -51,11 +52,34 @@ var TLimgHeight = 1944; //# Max = 1944
 var SNimgWidth = 320; // Max = 2592
 var SNimgHeight = 240; //# Max = 1944
 
-var TLinProgress = false;
-var VideoinProgress = false;
-
 
 var TLInterval = 10000;
+
+//Get IP address http://stackoverflow.com/questions/3653065/get-local-ip-address-in-node-js
+
+var os = require('os');
+var ifaces = os.networkInterfaces();
+
+Object.keys(ifaces).forEach(function (ifname) {
+  var alias = 0
+    ;
+
+  ifaces[ifname].forEach(function (iface) {
+    if ('IPv4' !== iface.family || iface.internal !== false) {
+      // skip over internal (i.e. 127.0.0.1) and non-ipv4 addresses
+      return;
+    }
+
+    if (alias >= 1) {
+      // this single interface has multiple ipv4 addresses
+      console.log(ifname + ':' + alias, iface.address);
+    } else {
+      // this interface has only one ipv4 adress
+      serverADDR = iface.address;
+    }
+  });
+});
+//---------------
 
 
 app.use(express.static(__dirname + '/public'));
@@ -99,8 +123,8 @@ var mkdirSync = function(path) {
 
 io.on('connection', function(socket) {
     var myDate = new Date();
-    socket.emit('connected', 'Connected ' + myDate.getHours() + ':' + myDate.getMinutes() + ':' + myDate.getSeconds()+ ' v' + version + ' @' + require('os').networkInterfaces().eth0[0].address);
-    socket.emit('serverADDR', require('os').networkInterfaces().eth0[0].address);
+    socket.emit('connected', 'Connected ' + myDate.getHours() + ':' + myDate.getMinutes() + ':' + myDate.getSeconds()+ ' v' + version + ' @' + serverADDR);
+    socket.emit('serverADDR', serverADDR);
     console.log('New socket.io connection - id: %s', socket.id);
     //socket.emit('serverADDR', require('os').networkInterfaces().eth0[0].address);
 
@@ -215,8 +239,6 @@ io.on('connection', function(socket) {
     });
 
     socket.on('takeSnapShot', function() {
-      //Need to check if the camera is in use and stop the services use the variables var TLinProgress = false;
-
 	snapShot(SNimgWidth, SNimgHeight, SNFolder, 'SN_' + timeStamp());
     
     });

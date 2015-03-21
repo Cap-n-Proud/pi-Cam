@@ -1,4 +1,4 @@
-//$fn = 250;
+$fn = 250;
 //Need to fix servo tilt suport issue. The spheric part does not move with the arm when you change xPos parameter
 // RPi supports does not touch the bottom of the case
 include <rpi.scad>;
@@ -526,13 +526,16 @@ module topLid() {
                 translate([0, 0, -supportZ - supportBaseHeight]) {
                     scale([1 + tolerance, 1 + tolerance, 1]) base("false");
                     scale([0.9, 0.9, 30]) base("false");
+
                     //This is the grid an hole for mic.need to re-work the placement definition as it will not work for other box dimensions!!!
-                    translate([boxLength / 2 - 5 - mik - boxThickness, boxDepth / 2 - 7 - mik - boxThickness, +14 - supportBaseHeight - topCoverHeight / 2]) rotate([0, 180, 0]) SUB_Mic();
+                    translate([boxLength / 2 - 5 - mik - boxThickness, -(boxDepth / 2 - 5 - mik - boxThickness), +14 - supportBaseHeight - topCoverHeight / 2]) rotate([0, 180, 0]) SUB_Mic();
+
                 }
-
+	
             }
-
+	
         }
+	
 
 
 
@@ -540,7 +543,12 @@ module topLid() {
 
     }
 
+//Need to explain the -1.4*supportBaseHeight
+difference(){
+translate([0,0,-supportZ-1.4*supportBaseHeight])rotate([0,-90,90])testSupport();
+       case ();
 
+}
 
 }
 
@@ -569,12 +577,69 @@ translate([-3*space,0,0])mountedPillar();
 translate([0,0,-3*space])topLid();
 
 
-translate([0,0,-4*space-1.5*supportZ])panSupport();
+//translate([0,0,-4*space-1.5*supportZ])panSupport();
 translate([0,0,-6*space])case ();
 
 }
 
-//assembly("");
-case();
-panSupport();
+
+//-------------------------------
+module testSupport(xPos, Pos) {
+        //Need to center the servo shaft, the seconf figure is the distance form border
+        eccentricity = 22.2 / 2 - 5;
+        servoBodySupport = 25;
+        //Need to adjust the clearance to account for the Xpos
+		armLenght = 1.4*(boxDepth/2);
+       difference() {
+
+            union() {
+
+                difference() {
+                    translate([-shellThickness / 2, 0, 15]) {
+                        cube([shellThickness, servoBodySupport, armLenght], center = true);
+                    }
+					
+                }
+
+                translate([-servoBodySupport / 2, 0, eccentricity]) {
+                    //This is the servo box
+                    difference() {
+                        cube([servoBodySupport, 12 + 1 + shellThickness, 22.2 + 1 + shellThickness], center = true);
+                        cube([servoBodySupport, 12 + 1, 22.2 + 1], center = true);
+
+                        //Servo cable slot
+                        translate([0, 0, -2 * eccentricity]) cube([100, 4, 4], center = true);
+
+                    }
+
+                }
+            }
+
+            //This is the slot in the servo arm. Need to check why -15 in the translate is needed
+translate([-(11)+(32.2/2+12/2+tolerance/2)-15, 0, eccentricity]) {
+
+                cube([20 + tolerance, 12+tolerance/2, 32.2 + tolerance], center = true);
+                translate([-31/2, 0, 0]) cube([31 + tolerance, 12+tolerance/2, 22.2 + tolerance], center = true);
+
+            }
+        
+
+
+}	
+
+//Dimensions are hardwired, should be parameters!!!
+		translate([-10,0,+armLenght/2+15])rotate([270,0,0])linear_extrude(height = servoBodySupport, center = true, convexity = 10, twist = 0)
+			//polygon([[0,0],[8,20],[10,0]], convexity = N);
+ polygon([[0,0],[10,armLenght/3],[10,0]], convexity = N);
+ 	
+}
+
+//-------------------------
+
+
+//assembly("explode");
+//case();
+topLid();
 //SUB_Power();
+
+
