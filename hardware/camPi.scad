@@ -1,4 +1,4 @@
-$fn = 250;
+$fn = 50;
 //Need to fix servo tilt suport issue. The spheric part does not move with the arm when you change xPos parameter
 // RPi supports does not touch the bottom of the case
 include <rpi.scad>;
