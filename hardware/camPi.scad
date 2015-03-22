@@ -1,4 +1,4 @@
-$fn = 50;
+$fn = 150;
 //Need to fix servo tilt suport issue. The spheric part does not move with the arm when you change xPos parameter
 // RPi supports does not touch the bottom of the case
 include <rpi.scad>;
@@ -236,12 +236,11 @@ module servoTiltSupport(xPos, Pos) {
             union() {
 
                 difference() {
-                    translate([-shellThickness / 2 + supportPosition, 0, 15]) {
-                        cube([shellThickness, 20, 2 * RatX(gimballWidth / 2)], center = true);
+                    translate([-shellThickness / 2 + supportPosition, 0, 0]) {
+                        cube([shellThickness, 20, 1.8 * RatX(gimballWidth / 2)], center = true);
                     }
 
-                    if (Pos == "tilt") {
-                        difference() {
+                       difference() {
                             translate([-shellThickness / 2 + supportPosition, 0, 15]) cube([shellThickness, 20, 2 * RatX(gimballWidth / 2)], center = true);
 
 
@@ -251,18 +250,18 @@ module servoTiltSupport(xPos, Pos) {
                         }
                     }
 
-                }
-
+  
                 translate([-servoBodySupport / 2 + supportPosition, 0, eccentricity]) {
                     //This is the servo box
-                    difference() {
+                     difference() {
                         cube([servoBodySupport, 12 + 1 + shellThickness, 22.2 + 1 + shellThickness], center = true);
-                        //cube([servoBodySupport, 12 + 1, 22.2 + 1], center = true);
+                        cube([servoBodySupport, 12 + 1, 22.2 + 1], center = true);
 
                         //Servo cable slot
-                        translate([0, 0, -2 * eccentricity]) cube([100, 3, 3], center = true);
+                        translate([0, 0, -2 * eccentricity]) cube([100, 4, 4], center = true);
 
                     }
+
 
                 }
             }
@@ -276,13 +275,24 @@ module servoTiltSupport(xPos, Pos) {
         }
 
         //This is the curved extra support for the connection with the gimball internal shell
-        if (Pos == "tilt") {
-            translate([0, 0, 0])
+             translate([0, 0, 0])SUB_tiltwedge(xPos);
+             mirror([0,0,1])translate([0, 0, 0])SUB_tiltwedge(xPos);
+
+  
+ 
+
+    }
+
+    //-------------------------
+
+module SUB_tiltwedge(xPos) {
+   supportCurvature = 30;
+	
             difference() {
-                translate([3, 0, +RatX(xPos) - 10])
+                translate([12, 0, +RatX(xPos) - 10])
                 difference() {
-                    cube([20, 20, 20], center = true);
-                    translate([-supportCurvature, 0, -supportCurvature]) sphere(r = supportCurvature + 20);
+                    cube([16, 20, 20], center = true);
+                    translate([-supportCurvature, 0, -supportCurvature]) sphere(r = supportCurvature + 20, center=true);
 
                 }
 
@@ -295,29 +305,10 @@ module servoTiltSupport(xPos, Pos) {
 
 
             }
-        }
 
-        //Dimensions are hardwired, should be parameters!!!
+}
 
-        if (Pos == "pan") {
 
-            translate([2 * shellThickness - 1, 0, 45]) rotate([270, 0, 0]) linear_extrude(height = servoBodySupport, center = true, convexity = 10, twist = 0)
-            polygon([
-                [0, 0],
-                [8, 20],
-                [10, 0]
-            ], convexity = N);
-            mirror([0, 0, 1]) translate([2 * shellThickness - 1, 0, 45]) rotate([270, 0, 0]) linear_extrude(height = servoBodySupport, center = true, convexity = 10, twist = 0) polygon([
-                [0, 0],
-                [7, 28],
-                [10, 30],
-                [10, 0]
-            ], convexity = N);
-
-        }
-
-    }
-    //-------------------------
 module cameraSupport() {
         difference() {
             difference() {
@@ -336,12 +327,15 @@ module cameraSupport() {
 
             //Hole for the camera
             translate([0, R, 0]) rotate([90, 0, 0]) cube([PIcameraDiam + tolerance, 10, PIcameraDiam + tolerance], center = true);
-        }
+		translate([PIcameraX/2-2, 0.9*R, PIcameraY/2-2])rotate([90,0,0])cylinder(r=1.2,h=10, center=true);
+		translate([-(PIcameraX/2-2), 0.9*R, PIcameraY/2-2])rotate([90,0,0])cylinder(r=1.2,h=10, center=true);
+		translate([PIcameraX/2-2, 0.9*R, -(PIcameraY/2-2)])rotate([90,0,0])cylinder(r=1.2,h=10, center=true);
+		translate([-(PIcameraX/2-2), 0.9*R, -(PIcameraY/2-2)])rotate([90,0,0])cylinder(r=1.2,h=10, center=true);         }
 
         //Need to hardwire the servo dimensions
 
         {
-            servoTiltSupport(15, "tilt");
+            servoTiltSupport(gimballWidth/2, "tilt");
 
 
         }
@@ -356,6 +350,7 @@ module cameraSupport() {
             gimballPivot(1);
         }
     }
+      
     //-------------------------
 
 module servoHorn(type) {
@@ -639,7 +634,11 @@ translate([-(11)+(32.2/2+12/2+tolerance/2)-15, 0, eccentricity]) {
 
 //assembly("explode");
 //case();
-topLid();
+//topLid();
 //SUB_Power();
 
+//mountedPillar();
 
+servoTiltSupport(gimballWidth/2, "tilt");
+
+//cameraSupport();
