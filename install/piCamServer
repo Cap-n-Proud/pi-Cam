@@ -1,0 +1,42 @@
+#! /bin/sh
+
+### BEGIN INIT INFO
+# Provides: robotserver
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Should-Start:      $named
+# Default-Start:     2 3 4 5
+# Default-Stop: 
+# Short-Description: start pi-Cam server
+# Description:
+### END INIT INFO
+
+#Activate
+# sudo chmod 0755 /etc/init.d/piCamServer
+# sudo update-rc.d robotserver defaults
+
+# Some things that run always
+#su ADD HERE
+
+# Carry out specific functions when asked to by the system
+case "$1" in
+  start)
+    su root -c 'sudo node /home/pi/pi-Cam/TLserver.js'
+    echo "Starting TL server"
+    # Print the IP address
+    _IP=$(hostname -I) || true
+    if [ "$_IP" ]; then
+      printf "My IP address is %s\n" "$_IP"
+    fi
+    ;;
+  stop)
+    su root -c 'sudo killall node'
+    echo "pi-Cam server has been stopped (didn't double check though)"
+    ;;
+  *)
+    echo "Usage: /etc/init.d/piCamServer {start|stop}"
+    exit 1
+    ;;
+esac
+
+exit 0
