@@ -1,4 +1,4 @@
-$fn = 150;
+$fn = 250;
 //Need to fix servo tilt suport issue. The spheric part does not move with the arm when you change xPos parameter
 // RPi supports does not touch the bottom of the case
 include <rpi.scad>;
@@ -254,8 +254,8 @@ module servoTiltSupport(xPos, Pos) {
                 translate([-servoBodySupport / 2 + supportPosition, 0, eccentricity]) {
                     //This is the servo box
                      difference() {
-                        cube([servoBodySupport, 12 + 1 + shellThickness, 22.2 + 1 + shellThickness], center = true);
-                        cube([servoBodySupport, 12 + 1, 22.2 + 1], center = true);
+                        cube([servoBodySupport, 12 + tolerance + shellThickness, 22.2 + 1 + shellThickness], center = true);
+                        cube([servoBodySupport, 12 + tolerance, 22.2 + 1], center = true);
 
                         //Servo cable slot
                         translate([0, 0, -2 * eccentricity]) cube([100, 4, 4], center = true);
@@ -267,8 +267,8 @@ module servoTiltSupport(xPos, Pos) {
             }
 
             //This is the slot in the servo arm
-            translate([servoClerance + 10, 0, eccentricity]) {
-                cube([20 + 1, 12, 32.2 + 1], center = true);
+            translate([servoClerance + 10 + shellThickness, 0, eccentricity]) {
+                cube([20 + tolerance, 12 + tolerance, 32.2 ], center = true);
                 translate([-31 / 2, 0, 0]) cube([31 + 1, 12, 22.2 + 1], center = true);
 
             }
@@ -639,6 +639,6 @@ translate([-(11)+(32.2/2+12/2+tolerance/2)-15, 0, eccentricity]) {
 
 //mountedPillar();
 
-servoTiltSupport(gimballWidth/2, "tilt");
+//servoTiltSupport(gimballWidth/2, "tilt");
 
-//cameraSupport();
+cameraSupport();

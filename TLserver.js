@@ -30,7 +30,7 @@ var io = require('/usr/local/lib/node_modules/socket.io')(http);
 var fs = require('/usr/local/lib/node_modules/safefs');
 var piblaster = require('/usr/local/lib/node_modules/pi-blaster.js');
 
-var PiFastGpio = require('/usr/local/lib/node_modules/pi-fast-gpio//index.js');
+//var PiFastGpio = require('/usr/local/lib/node_modules/pi-fast-gpio//index.js');
 
 var SERVO_1_GPIO = 4;
 var SERVO_2_GPIO = 18;
@@ -41,7 +41,7 @@ var PORT = 8888;
 var pw = 2000; // pulsewidth in microseconds
 var change = 20;
 
-var gpio = new PiFastGpio();
+//var gpio = new PiFastGpio();
 
 var sys = require('sys');
 var exec = require('child_process').exec;
