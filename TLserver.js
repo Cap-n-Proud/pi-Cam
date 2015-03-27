@@ -2,9 +2,9 @@
 // to refresh the port allocation
 var events = require('events');
 var eventEmitter = new events.EventEmitter();
-var TLFolder = "/home/pi/Documents/TL/"
-var SNFolder = "/home/pi/Documents/SN/"
-
+var TLFolder = "/home/pi/Documents/TL/";
+var SNFolder = "/home/pi/Documents/SN/";
+var InstallPath = "/home/pi/pi-Cam/";
 
 var serPort = "/dev/ttyACM0";
 var serBaud = 38400;
@@ -142,7 +142,7 @@ io.on('connection', function(socket) {
         function puts(error, stdout, stderr) {
             sys.puts(stdout)
         }
-        exec('sudo bash /home/pi/time-lapse-server/scripts/' + Video, puts);
+        exec('sudo bash ' + InstallPath + 'scripts/' + Video, puts);
     });
 
 

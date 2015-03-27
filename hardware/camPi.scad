@@ -327,10 +327,9 @@ module cameraSupport() {
 
             //Hole for the camera
             translate([0, R, 0]) rotate([90, 0, 0]) cube([PIcameraDiam + tolerance, 10, PIcameraDiam + tolerance], center = true);
-		translate([PIcameraX/2-2, 0.9*R, PIcameraY/2-2])rotate([90,0,0])cylinder(r=1.2,h=10, center=true);
-		translate([-(PIcameraX/2-2), 0.9*R, PIcameraY/2-2])rotate([90,0,0])cylinder(r=1.2,h=10, center=true);
-		translate([PIcameraX/2-2, 0.9*R, -(PIcameraY/2-2)])rotate([90,0,0])cylinder(r=1.2,h=10, center=true);
-		translate([-(PIcameraX/2-2), 0.9*R, -(PIcameraY/2-2)])rotate([90,0,0])cylinder(r=1.2,h=10, center=true);         }
+		translate([0,0.9*R,0])SUB_PiCamHoles(0.3);
+    
+            }
 
         //Need to hardwire the servo dimensions
 
@@ -352,6 +351,46 @@ module cameraSupport() {
     }
       
     //-------------------------
+
+module SUB_PiCamHoles(T) {
+// T is the tolerance for holes
+        translate([PIcameraX/2-2, 0, PIcameraY/2-2])rotate([90,0,0])cylinder(r=1+T,h=10, center=true);
+		translate([-(PIcameraX/2-2), 0, PIcameraY/2-2])rotate([90,0,0])cylinder(r=1+T,h=10, center=true);
+		translate([PIcameraX/2-2, 0, (PIcameraY/2-2)-12.5])rotate([90,0,0])cylinder(r=1+T,h=10, center=true);
+		translate([-(PIcameraX/2-2), 0, (PIcameraY/2-2)-12.5])rotate([90,0,0])cylinder(r=1+T,h=10, center=true); 
+    
+}    
+    
+    
+
+camBolt();
+module camBolt() {
+    difference(){
+         SUB_camBoltFrame();
+        SUB_PiCamHoles(0.1);
+      
+    
+}
+}
+
+
+
+module SUB_camBoltFrame(){
+
+
+translate([PIcameraX/2-2,0,PIcameraY/2-2])rotate([90,0,0])cylinder(r=3,h=8, center=true);
+translate([-(PIcameraX/2-2),0,PIcameraY/2-2])rotate([90,0,0])cylinder(r=3,h=8, center=true);
+translate([-(PIcameraX/2-2),0,+(PIcameraY/2-2)-12.5])rotate([90,0,0])cylinder(r=3,h=8, center=true);
+translate([(PIcameraX/2-2),0,+(PIcameraY/2-2)-12.5])rotate([90,0,0])cylinder(r=3,h=8, center=true);
+translate([0,+2.5-4,0]){
+    translate([0,0,(PIcameraY/2-2)-12.5])cube([(PIcameraX-2),5,5], center=true);
+translate([0,0,(PIcameraY/2-2)])cube([(PIcameraX-2),5,5], center=true);
+translate([PIcameraX/2-2.5,0,12.5/2])cube([5,5,(12.5)], center=true);
+translate([-(PIcameraX/2-2.5),0,12.5/2])cube([5,5,(12.5)], center=true);
+}
+
+}
+
 
 module servoHorn(type) {
         cube([servoHornThickness, servoHornWidth, servoHornLenght], center = true);
@@ -641,4 +680,5 @@ translate([-(11)+(32.2/2+12/2+tolerance/2)-15, 0, eccentricity]) {
 
 //servoTiltSupport(gimballWidth/2, "tilt");
 
-cameraSupport();
+//cameraSupport();
+//support();
