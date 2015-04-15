@@ -33,7 +33,7 @@ var piblaster = require('/usr/local/lib/node_modules/pi-blaster.js');
 //var PiFastGpio = require('/usr/local/lib/node_modules/pi-fast-gpio//index.js');
 
 var SERVO_1_GPIO = 4;
-var SERVO_2_GPIO = 18;
+var SERVO_2_GPIO = 17;
 var HOST = '127.0.0.1';
 var serverADDR = 'N/A';
 var PORT = 8888;
@@ -157,17 +157,25 @@ io.on('connection', function(socket) {
     socket.on('move', function(dX, dY) {
         //console.log('event: ', dX, dY);
         //Need a value -100, 100
-        //piblaster.setPwm(17, (rescale(parseFloat(dX), -100, 100, 0.07, 0.20)));
-        //piblaster.setPwm(4, (rescale(parseFloat(dY), -100, 100, 0.06, 0.19)));
+        piblaster.setPwm(17, (rescale(parseFloat(dX), -100, 100, 0.1, 0.3)));
+        piblaster.setPwm(4, (rescale(parseFloat(dY), -100, 100, 0.08, 0.19)));
 	
-	gpio.setServoPulsewidth(SERVO_1_GPIO, rescale(parseFloat(dX), -100, 100, 1000, 2000));
-	gpio.setServoPulsewidth(SERVO_2_GPIO, rescale(parseFloat(dY), -100, 100, 1000, 2000));
+	//gpio.setServoPulsewidth(SERVO_1_GPIO, rescale(parseFloat(dX), -100, 100, 1000, 2000));
+	//gpio.setServoPulsewidth(SERVO_2_GPIO, rescale(parseFloat(dY), -100, 100, 1000, 2000));
       
         //console.log(parseFloat(dX));
         //console.log(parseFloat(dY));
 
         //console.log(rescale(parseFloat(dY),-50,50,0.06,0.15));
         //console.log(rescale(parseFloat(dX),-100,100,0.07,0.20));
+    });
+    
+    socket.on('stopCam', function(dX, dY) {
+        piblaster.setPwm(17, 0);
+        piblaster.setPwm(4, 0);
+
+
+      
     });
 
     socket.on('TLInterval', function(T) {

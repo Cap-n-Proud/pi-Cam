@@ -54,7 +54,7 @@
         var maxX = 100;
         maxY = 100;
         var prevX, prevY;
-        var gain = 0.05;
+        var gain = 0.025;
         var joystick = new VirtualJoystick({
             container: document.getElementById('container'),
             mouseSupport: true,
@@ -95,6 +95,7 @@
 
         function mouseUp() {
             document.getElementById("container").style.color = "black";
+            socket.emit('stopCam');
         }
     </script>
 </body>
