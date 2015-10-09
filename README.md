@@ -1,9 +1,9 @@
-time-lapse-server
+Pi-Cam
 =================
 
-Node timelapse server. The idea is to use this as a platform for IP camera, time lapse and computer vision in general. The structure will be modular.
+Platform for remote surveillance, time lapse and computer vision projects
 
-At the moment I am experiencing issues with the servo control 
+https://paolonegrini.wordpress.com/2015/10/09/cam-pi/
 
 Install:
 1. git https://github.com/pfnegrini/time-lapse-server.git
