@@ -1,4 +1,28 @@
-// $fn = 250;
+/*
+The MIT License (MIT)
+
+Copyright (c) 2015 Paolo Negrini
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+*/
+
+$fn = 250;
 //Need to fix servo tilt suport issue. The spheric part does not move with the arm when you change xPos parameter
 // RPi supports does not touch the bottom of the case
 include <rpi.scad>;
@@ -683,6 +707,6 @@ translate([-(11)+(32.2/2+12/2+tolerance/2)-15, 0, eccentricity]) {
 
 //servoTiltSupport(gimballWidth/2, "tilt");
 
-cameraSupport();
+//cameraSupport();
 //support();
-//camBolt();
+camBolt();

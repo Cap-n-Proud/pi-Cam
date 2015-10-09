@@ -32,7 +32,7 @@ asd
 echo -n "Want to confgure RaspberryPi? [Y/N]"
 read BUILDUP
 
-git clone https://github.com/phueper/pi-blaster.git /home/pi/pi-blaster
+git clone https://github.com/sarfata/pi-blaster.git /home/pi/pi-blaster
 
 
 if [ "$BUILDUP" == "Y" ]

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CamServer | Welcome</title>
+    <link rel="stylesheet" href="foundation/css/foundation.css">
+    <script src="foundation/js/vendor/modernizr.js"></script>
+    <script src="foundation/js/foundation.min.js"></script>
+    <script type="text/javascript" src="js/socket.io.js"></script>
+    <script src="jquery/lib/jquery-1.7.1.js"></script>
+     <link rel="stylesheet" href="css/custom.css">
+    <link rel="text/html" href="favicon.html">
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+  
+</head>
+
+<body>
+
+   <div class="row">
+    <!--
+        <div class="large-3 columns">
+          <h1><img src="http://placehold.it/400x100&text=Logo"/></h1>
+        </div>
+        <div class="large-9 columns">
+          <ul class="right button-group">
+          <li><a href="#" class="button">Link 1</a></li>
+          <li><a href="#" class="button">Link 2</a></li>
+          <li><a href="#" class="button">Link 3</a></li>
+          <li><a href="#" class="button">Link 4</a></li>
+          </ul>
+         </div>
+       </div>
+      
+      <div class="row">
+        <div class="large-12 columns">
+        <div id="slider">
+          <img src="http://placehold.it/1000x400&text=[ img 1 ]"/>
+        </div>
+        
+        <hr/>
+        </div>
+      </div>
+      
+     -->   
+     
+     
+      <div class="row">
+        <div class="large-4 columns">
+           <iframe id="videoFeed" src="default.html" width="330" height="250" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+        </div>
+        
+        <div class="large-4 columns">
+            <iframe id="camControl" src="default.html" width="280" height="280" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+        </div>
+        
+        <div class="large-4 columns">
+               <!-- Begin of commands -->
+               <div class="row">
+                    <div class="small-6 columns">
+                    
+                    <h5 class="left">
+		      <i class="fa fa-clock-o fa-2x"></i>
+                    </h5>
+                     <div class="switch round small right"><input id="TLStart" type="checkbox" onclick="TLStart(this)"><label for="TLStart"></label></div>
+
+                    </div>
+                    
+                    <div class="small-3 columns">
+                    &nbsp;
+                    
+                    </div>
+                    
+                    <div class="small-3 columns">
+                    &nbsp;
+                    </div>
+               </div>
+                
+                
+               <div class="row">
+                    <div class="small-6 columns">
+                     <h5 class="left">
+                        <i class="fa fa-refresh fa-2x"></i>
+                    </h5>
+                     <div style="float:right; vertical-align:middle;">
+                      <input class="left" id="TLintervalVal" style="text-align:right; width:40px; margin-right:0rem;" type="text" placeholder="sec">
+                        <a href="#" class="button postfix inline round" style="width:20px" onclick="setTLInterval()"></a>
+                     </div>
+                    </div>
+                    
+                    <div class="small-3 columns">
+                    &nbsp;
+                    </div>
+                    
+                    <div class="small-3 columns">
+                    &nbsp;
+                    </div>
+               </div>
+                    
+                
+               <div class="row">
+                    <div class="small-6 columns">
+                      <i class="fa fa-video-camera  fa-2x"></i>
+                      <div class="switch round small right"><input id="Video" type="checkbox" onclick="VideoF(this)"><label for="Video"></label></div>
+                      
+         
+
+                    </div>
+                    
+                    <div class="small-3 columns">
+                    &nbsp;
+                    </div>
+                    
+                    <div class="small-3 columns">
+                    &nbsp;
+                    </div>
+               </div>  
+               <div class="row" style="float:center; vertical-align:middle;" >
+                    <div class="small-6 columns">
+                      
+                      <a href="#" onclick="takeSnapshot()" class="button round"> <i class="fa fa-picture-o  fa-2x"></i></a>
+
+
+                    </div>
+                               <div class="small-3 columns">
+                    &nbsp;
+                    </div>
+                    
+                    <div class="small-3 columns">
+                    &nbsp;
+                    </div>
+                    
+               </div>          
+               <!-- End of commands -->      
+        </div>
+         
+         
+         <div class="row">
+            <div class="small-12 columns">
+            
+             <ul class="small-block-grid-2 medium-block-grid-3 large-block-grid-4">
+                <li><span class="labelSwitch">
+                    <i class="fa fa-terminal"></i>
+                </span>
+                <span class="labelSwitch" id="CMD">last command</span></li>
+                <li><span class="labelSwitch">
+                    <i class="fa fa-folder-open"></i>
+                </span>
+                <span class="labelSwitch" id="Folder">Folder</span>
+               
+                </li>
+                <li><span class="labelSwitch">
+                    <i class="fa fa-info-circle"></i>
+                </span>
+                <span class="labelSwitch" id="Info">Info</span></li>
+               </ul>
+            </div>
+         </div>
+       
+      <!--
+      <object name="footer" type="text/html" data="footer.html"></object>
+      This does not apply stiles...
+      
+
+<footer class="row">
+        <div class="large-12 columns">
+          <hr/>
+          <div class="row">
+            <div class="large-6 columns">
+              <p>© Copyright no one at all. Go to town.</p>
+            </div>
+            <div class="large-6 columns">
+              <ul class="inline-list right">
+                <li><a href="#">Link 1</a></li>
+                <li><a href="#">Link 2</a></li>
+                <li><a href="#">Link 3</a></li>
+                <li><a href="#">Link 4</a></li>
+              </ul>
+            </div>
+          </div>
+        </div> 
+</footer>
+      
+      --->
+    
+    
+    
+    
+    
+    
+    
+    
+    <script>
+	var serverADDR = "N/A";
+	var serverPort = "N/A";
+	var videoFeedPort = "N/A";
+
+	var socket = io();
+	var status = 0;
+
+	function VideoF(element) {
+	  var status = 0;
+	  if (element.checked == true) {
+		socket.emit('Video', "cameraON.sh");
+		status =1;
+		//document.getElementById('videoFeed').contentWindow.location.reload(true);
+	  } else {
+		socket.emit('Video', "cameraOFF.sh");
+		status =0;
+		}
+	    if (status == 1){
+	     setTimeout(camFeedRefresh, 1000);
+	     }
+	     else
+	     {
+	     setTimeout(camOFF, 1000);
+	
+	     }
+	}
+	
+	function camFeedRefresh(){
+	    document.getElementById('videoFeed').src = 	document.getElementById("videoFeed").src = 'http://' + serverADDR + ':' + videoFeedPort + '/javascript_simple.html';
+	
+	}
+	
+	function camOFF(){
+	   document.getElementById('videoFeed').src = "default.html";
+	 
+	}
+	
+	
+	
+	function takeSnapshot(element) {
+	  socket.emit('takeSnapShot');	
+	}
+	
+	function TLStart(element) {
+
+	    if (element.checked == true) {
+		socket.emit('TLStart');
+		document.getElementById('videoFeed').src = document.getElementById('videoFeed').src;
+
+	    } else {
+		socket.emit('TLStop');
+	    }
+	}
+
+
+	function setTLInterval() {
+	    socket.emit('TLInterval', document.getElementById("TLintervalVal").value);
+	}
+
+	socket.on('Info', function(CMD) {
+	    document.getElementById("Info").innerHTML = CMD;
+	});
+	
+      
+	socket.on('Folder', function(CMD) {
+	    document.getElementById("Folder").innerHTML = CMD;
+	});
+
+	socket.on('CMD', function(CMD) {
+	    document.getElementById("CMD").innerHTML = CMD;
+	});
+
+	socket.on('connected', function(info, serverAddress, sPort, videoPort){
+    	
+	   serverADDR = serverAddress.toString();
+	   serverPort = sPort.toString(); 
+	   videoFeedPort = videoPort.toString();
+	     
+	   document.getElementById("Info").innerHTML = info;
+	   document.getElementById("videoFeed").src = 'http://' + serverADDR + ':' + videoFeedPort + '/javascript_simple.html';
+	   document.getElementById("camControl").src = 'http://' + serverADDR + ':' + serverPort + '/vj';
+		
+	}); 
+    </script>
+
+</body>
+
+</html>

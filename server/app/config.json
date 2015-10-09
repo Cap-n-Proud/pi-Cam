@@ -1,0 +1,39 @@
+{
+  "server": {
+    "name": "Pi-Cam",
+    "serverPort": 54321,
+    "serBaud": 38400,
+    "serPort": "N/A",
+    "version": "1",
+    "nodeLib": "",
+    "SNFolder": "/home/pi/Documents/SN/",
+"TLFolder": "/home/pi/Documents/TL/",
+    "installPath": "/home/pi/pi-Cam/",
+    "logfilePath": "/home/pi/Documents/log/",
+    "empty":"N/A"
+  },
+  "telemetry": {
+    "telemetryfilePath": "N/A",
+    "SEPARATOR": ","    
+  },
+  "hardware":{
+    "SERVO_1_GPIO": 4,
+    "SERVO_2_GPIO": 17,
+    "SERVO_1_MIN": "0.08",
+    "SERVO_1_MAX": "0.19",
+    "SERVO_2_MIN": "0.1",
+    "SERVO_2_MAX": "0.3",
+	"pw":"2000"    
+  },
+  "camera": {
+    "TLimgWidth": 2592,
+    "TLimgHeight": 1944,
+    "TLInterval": 10000,
+    "SNimgWidth": 320,
+    "SNimgHeight": 240    
+  },
+  "MJPG": {
+    "MJPGPort": 9000    
+  }
+  
+}

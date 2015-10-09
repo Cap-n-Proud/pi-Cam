@@ -1,0 +1,26 @@
+{
+  "name": "Pi-Cam",
+  "version": "0.9.0",
+  "description": "Node application to control remote camera",
+  "main": "server.js",
+  "dependencies": {
+	"express": "4.x.x",
+	"nconf": "0.8.x",
+	"events":"1.x.x",
+	"bunyan": "1.x.x",
+	"fs": "0.x.x",
+	"safefs": "4.x.x",
+	"socket.io": "1.x.x",
+	"pi-blaster.js": "0.x.x"
+	},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Paolo Negrini",
+  "license": "MIT",
+"engine": "node 0.12.7",
+"repository" :
+  { "type" : "git"
+  , "url" : "https://github.com/pfnegrini/pi-Cam.git"
+  }
+}
