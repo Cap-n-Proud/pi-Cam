@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-$fn = 250;
+//$fn = 250;
 //Need to fix servo tilt suport issue. The spheric part does not move with the arm when you change xPos parameter
 // RPi supports does not touch the bottom of the case
 include <rpi.scad>;
@@ -90,7 +90,7 @@ module panSupport() {
                 [0, 0, 1, 0],
                 [0, 0, 0, 1]
             ]) cylinder(h = servoPanZ, d1 = boxDepth, d2 = servoY + 2 * servoPanBoxThickness, center = true);
-            //Creates bottom support blocks add -mik to y transaltion if you want to zero the mechanical interference
+            //Creates bottom support blocks add -mik to y translate if you want to zero the mechanical interference
             translate([0, boxDepth / 2 - 20 / 2 - mik, -servoPanZ / 2 + 5]) cube([boxHeight / 2 + servoPanBoxX, 20, 10], center = true);
             mirror([0, 1, 0]) translate([0, boxDepth / 2 - 20 / 2 - mik, -servoPanZ / 2 + 5]) cube([boxHeight / 2 + (servoX - 2 * boxThickness - tolerance), 20, 10], center = true);
         }
@@ -120,7 +120,7 @@ module panSupport() {
 
 //--------------------------------------- 
 //This was the verion for RPi v1
-module panSupportOLD() {
+module panSupportRPiV1() {
     //rotate([0,270,0])servoTiltSupport(15,"pan");
     difference() {
         union() {
@@ -130,7 +130,7 @@ module panSupportOLD() {
                 [0, 0, 1, 0],
                 [0, 0, 0, 1]
             ]) cylinder(h = servoPanZ, d1 = boxDepth, d2 = servoY + 2 * servoPanBoxThickness, center = true);
-            //Creates bottom support blocks add -mik to y transaltion if you want to zero the mechanical interference
+            //Creates bottom support blocks add -mik to y translate if you want to zero the mechanical interference
             translate([0, boxDepth / 2 - 20 / 2 - mik, -servoPanZ / 2 + 5]) cube([boxHeight / 2 + servoPanBoxX, 20, 10], center = true);
             mirror([0, 1, 0]) translate([0, boxDepth / 2 - 20 / 2 - mik, -servoPanZ / 2 + 5]) cube([boxHeight / 2 + (servoX - 2 * boxThickness - tolerance), 20, 10], center = true);
         }
@@ -214,8 +214,7 @@ module base(servo) {
             }
         }
     }
-    //-------------------------
-    //				translate([0, 0, -supportZ - servoHornThickness-mik])rotate([0, 90, 0])servoHorn("cross");
+  
 
 module supportSection() {
         intersection() {
@@ -229,8 +228,9 @@ module supportSection() {
     }
     //-------------------------
 
-module tiltSupport()
     //This creates the supporting pillar for the camera shell
+    module tiltSupport()
+
     {
         union() {
             difference() {
@@ -267,12 +267,6 @@ module servoTiltSupport(xPos, Pos) {
                        
                difference(){sphere(5*R);sphere(R - shellThickness);}
                        difference() {
-                          //  translate([-shellThickness / 2 + supportPosition, 0, 15]) cube([shellThickness, 20, 2 * RatX(gimballWidth / 2)], center = true);
-
-
-                            //The size of the sphere governs where the servo support will be cut. Need to add tolerance if you whant to print as one piece with the shell.
-                         //   sphere(RatX(gimballWidth / 2) + shellThickness + tolerance);
-
                         }
                     }
 
@@ -365,7 +359,7 @@ module cameraSupport() {
 
 
         }
-        //pivot mechanism. Need to understand why 0.98 otehrwise a layer bets created
+        //Pivot mechanism. Need to understand why 0.98 otherwise a layer gets created
         translate([-gimballWidth / 2, 0, 0]) {
             difference() {
                 rotate([0, 90, 0]) cylinder(r = panSupport, h = 0.98*shellThickness);
@@ -698,7 +692,7 @@ translate([-(11)+(32.2/2+12/2+tolerance/2)-15, 0, eccentricity]) {
 //-------------------------
 
 
-//assembly("explode");
+assembly("explode");
 //case();
 //topLid();
 //SUB_Power();
@@ -709,4 +703,6 @@ translate([-(11)+(32.2/2+12/2+tolerance/2)-15, 0, eccentricity]) {
 
 //cameraSupport();
 //support();
-camBolt();
+//camBolt();
+
+  
