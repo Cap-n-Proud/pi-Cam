@@ -339,7 +339,7 @@ module cameraSupport() {
 
             translate([R + gimballWidth / 2, 0, 0]) cube([2 * R, 2 * R, 2 * R], center = true);
             translate([-R - gimballWidth / 2, 0, 0]) cube([2 * R, 2 * R, 2 * R], center = true);
-            //Creates camera support
+              //Creates camera support
             translate([0, R - 7, 0]) cube([PIcameraX + tolerance, 3, PIcameraY + tolerance], center = true);
             translate([0, R - 7, 0]) cube([2, 3, PIcameraY], center = true);
             //Slot for camera wires
@@ -347,9 +347,8 @@ module cameraSupport() {
 
 
             //Hole for the camera
-            translate([0, R, 0]) rotate([90, 0, 0]) cube([PIcameraDiam + tolerance, 10, PIcameraDiam + tolerance], center = true);
+            translate([0, R, 0]) rotate([90, 0, 0]) cube([PIcameraDiam + 2*tolerance, 10, PIcameraDiam + 2*tolerance], center = true);
 		translate([0,0.9*R,0])SUB_PiCamHoles(0.3);
-    
             }
 
         //Need to hardwire the servo dimensions
@@ -375,10 +374,10 @@ module cameraSupport() {
 
 module SUB_PiCamHoles(T) {
 // T is the tolerance for holes
-        translate([PIcameraX/2-2, 0, PIcameraY/2-2])rotate([90,0,0])cylinder(r=1+T,h=10, center=true);
-		translate([-(PIcameraX/2-2), 0, PIcameraY/2-2])rotate([90,0,0])cylinder(r=1+T,h=10, center=true);
-		translate([PIcameraX/2-2, 0, (PIcameraY/2-2)-12.5])rotate([90,0,0])cylinder(r=1+T,h=10, center=true);
-		translate([-(PIcameraX/2-2), 0, (PIcameraY/2-2)-12.5])rotate([90,0,0])cylinder(r=1+T,h=10, center=true); 
+        translate([PIcameraX/2-2, 0, PIcameraY/2-1])rotate([90,0,0])cylinder(r=1+T,h=10, center=true);
+		translate([-(PIcameraX/2-2), 0, PIcameraY/2-1])rotate([90,0,0])cylinder(r=1+T,h=10, center=true);
+		translate([PIcameraX/2-2, 0, (PIcameraY/2-1)-12.5])rotate([90,0,0])cylinder(r=1+T,h=10, center=true);
+		translate([-(PIcameraX/2-2), 0, (PIcameraY/2-1)-12.5])rotate([90,0,0])cylinder(r=1+T,h=10, center=true); 
     
 }    
     
@@ -705,4 +704,4 @@ assembly("explode");
 //support();
 //camBolt();
 
-  
+    
